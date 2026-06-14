@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Joke Generator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .joke-box {
+      background: #f8f9fa;
+      border: 2px solid #667eea;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .joke-content {
+      text-align: center;
+    }
+
+    .joke-text {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .joke-punchline {
+      font-size: 16px;
+      color: #667eea;
+      font-weight: 600;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .joke-punchline.show {
+      display: block;
+    }
+
+    .joke-type {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .loading {
+      text-align: center;
+      color: #667eea;
+      font-size: 16px;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .btn-secondary:hover {
+      background: #f0f2ff;
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .error {
+      background: #fee;
+      color: #c33;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .stats {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #999;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .joke-box {
+        min-height: 120px;
+        padding: 20px;
+      }
+
+      .joke-text {
+        font-size: 16px;
+      }
+
+      .button-group {
+        gap: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>😂 Joke Generator</h1>
+      <p>Get a random laugh every time!</p>
+    </div>
+
+    <div class="error" id="error"></div>
+
+    <div class="joke-box" id="jokeBox">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading a joke...</p>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-primary" id="getJokeBtn" onclick="fetchJoke()">Get New Joke</button>
+      <button class="btn-secondary" id="revealBtn" onclick="revealPunchline()" style="display:none;">Reveal Punchline</button>
+    </div>
+
+    <div class="stats">
+      <p>Jokes loaded: <span id="jokeCount">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    let jokeCount = 0;
+    let currentJoke = null;
+
+    async function fetchJoke() {
+      const jokeBox = document.getElementById('jokeBox');
+      const errorBox = document.getElementById('error');
+      const getJokeBtn = document.getElementById('getJokeBtn');
+      const revealBtn = document.getElementById('revealBtn');
+
+      // Reset UI
+      errorBox.classList.remove('show');
+      revealBtn.style.display = 'none';
+      getJokeBtn.disabled = true;
+
+      // Show loading state
+      jokeBox.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading a joke...</p>
+        </div>
+      `;
+
+      try {
+        // Fetch from Official Joke API
+        const response = await fetch('https://official-joke-api.appspot.com/random_joke');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch joke');
+        }
+
+        const joke = await response.json();
+        currentJoke = joke;
+        jokeCount++;
+
+        // Display joke
+        displayJoke(joke);
+
+        // Update stats
+        document.getElementById('jokeCount').textContent = jokeCount;
+
+        // Show reveal button for two-part jokes
+        if (joke.setup && joke.punchline) {
+          revealBtn.style.display = 'block';
+        }
+
+      } catch (error) {
+        console.error('Error fetching joke:', error);
+        errorBox.textContent = 'Oops! Failed to load a joke. Please try again.';
+        errorBox.classList.add('show');
+
+        jokeBox.innerHTML = `
+          <div class="joke-content">
+            <p class="joke-text">😅 Looks like the joke server is taking a break!</p>
+          </div>
+        `;
+      } finally {
+        getJokeBtn.disabled = false;
+      }
+    }
+
+    function displayJoke(joke) {
+      const jokeBox = document.getElementById('jokeBox');
+
+      if (joke.setup && joke.punchline) {
+        // Two-part joke
+        jokeBox.innerHTML = `
+          <div class="joke-content">
+            <p class="joke-text">${joke.setup}</p>
+            <p class="joke-punchline" id="punchline">${joke.punchline}</p>
+            <div class="joke-type">Two-Part Joke</div>
+          </div>
+        `;
+      } else {
+        // Single joke
+        jokeBox.innerHTML = `
+          <div class="joke-content">
+            <p class="joke-text">${joke.joke || joke.setup}</p>
+            <div class="joke-type">Quick Joke</div>
+          </div>
+        `;
+      }
+    }
+
+    function revealPunchline() {
+      const punchline = document.getElementById('punchline');
+      const revealBtn = document.getElementById('revealBtn');
+
+      if (punchline) {
+        punchline.classList.add('show');
+        revealBtn.textContent = '✓ Punchline Revealed';
+        revealBtn.disabled = true;
+      }
+    }
+
+    // Load first joke on page load
+    window.addEventListener('load', () => {
+      fetchJoke();
+    });
+  </script>
+</body>
+</html>
