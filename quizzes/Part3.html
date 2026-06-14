@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biology & Taxonomy Quiz - Part 3 (True/False)</title>
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --primary-hover: #2c974b;
+            --bg-color: #f6f8fa;
+            --card-bg: #ffffff;
+            --text-main: #24292e;
+            --text-muted: #586069;
+            --border: #e1e4e8;
+            --correct-bg: #d4edda;
+            --correct-border: #c3e6cb;
+            --correct-text: #155724;
+            --wrong-bg: #f8d7da;
+            --wrong-border: #f5c6cb;
+            --wrong-text: #721c24;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-ar {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            direction: rtl;
+            text-align: right;
+            border-right: 3px solid var(--border);
+            padding-right: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-btn {
+            background-color: #fcfcfc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f0f3f6;
+            border-color: #d1d5da;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+            font-weight: 600;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: var(--wrong-text);
+        }
+
+        .explanation-toggle {
+            background: none;
+            border: none;
+            color: #0366d6;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0;
+            font-weight: 600;
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .explanation-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .explanation-content {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            direction: rtl;
+            text-align: right;
+        }
+
+        .explanation-content.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-text {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .terms-text {
+            white-space: pre-line;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Biology Interactive Review - Part 3</h1>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            qEn: "Lichens used as air pollution indicators because they absorb heavy metals.",
+            qAr: "تُستخدم الأشنات كمؤشرات لتلوث الهواء لأنها تمتص المعادن الثقيلة.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن الأشنات (Lichens) تعتبر حساسة جداً لملوثات الهواء، وتحديداً أكاسيد الكبريت (Sulphur oxides) وليس المعادن الثقيلة. لذلك تُستخدم كمؤشرات بيئية (Indicators) فعالة لرصد مستويات التلوث الجوي بهذه الأكاسيد.",
+            terms: "تعريف المصطلحات:\nLichens (الأشنات): كائنات مركبة تنشأ من علاقة تكافلية بين فطر وطحلب أو بكتيريا زرقاء.\nAir pollution indicators (مؤشرات تلوث الهواء): كائنات حية تُستخدم لتقييم جودة الهواء نظراً لحساسيتها الشديدة للملوثات البيئية.\nSulphur oxides (أكاسيد الكبريت): مركبات كيميائية غازية ملوثة للهواء تؤثر بشدة على نمو وبقاء الأشنات."
+        },
+        {
+            qEn: "Euglena is the organism challenged Linnaeus' two-kingdom system.",
+            qAr: "اليوجلينا هي الكائن الذي تحدى نظام المملكتين للعالم لينيوس.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) حيث لم يُذكر في المصادر أن اليوجلينا هي ما تحدى النظام. بدلاً من ذلك، تم اقتراح مملكة الطلائعيات (Protista) لاستيعاب كافة الكائنات التي لا تُشكل أنسجة معقدة (Complex tissues) والتي لم تتناسب مع نظام المملكتين التقليدي.",
+            terms: "تعريف المصطلحات:\nTwo-kingdom system (نظام المملكتين): نظام تصنيف تاريخي قسّم الكائنات الحية إلى مملكتين فقط هما النباتات والحيوانات.\nProtista (الطلائعيات): مملكة ثالثة تم اقتراحها لتشمل الكائنات الحية الدقيقة التي تفتقر إلى تعقيد الأنسجة الموجود في النباتات والحيوانات."
+        },
+        {
+            qEn: "The principal red algal storage carbohydrate is the Floridean starch.",
+            qAr: "الكربوهيدرات التخزينية الرئيسية في الطحالب الحمراء هي النشا الفلوريدي.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث تُخزن الطحالب الحمراء الغذاء بشكل أساسي على هيئة نشا فلوريدي (Floridean starch) وفلوريدوسيد (Floridoside). وتفتقر هذه الطحالب إلى النشا الحقيقي (True starch) الموجود في النباتات الراقية والطحالب الخضراء.",
+            terms: "تعريف المصطلحات:\nRed algae (الطحالب الحمراء): مجموعة من الطحالب تمتلك صبغات حمراء وتخزن غذاءها بصيغ كربوهيدراتية خاصة.\nFloridean starch (النشا الفلوريدي): نوع من الكربوهيدرات المعقدة التخزينية التي تميز خلايا الطحالب الحمراء."
+        },
+        {
+            qEn: "The protein plugs are the characteristic feature found in green algae cell walls.",
+            qAr: "السدادات البروتينية هي السمة المميزة الموجودة في الجدران الخلوية للطحالب الخضراء.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن السدادات البروتينية (Protein plugs) أو الروابط النقرية هي سمة غير عادية ومميزة للجدران الخلوية في الطحالب الحمراء (Red algae) وليس الطحالب الخضراء، حيث تربط بين الخلايا المتجاورة.",
+            terms: "تعريف المصطلحات:\nProtein plugs (السدادات البروتينية): تراكيب بروتينية توجد في الفجوات بين الجدران الخلوية لبعض الطحالب لربط الخلايا ببعضها.\nPit connections (الروابط النقرية): قنوات أو ثقوب دقيقة في الجدران الخلوية تسمح بالاتصال المباشر بين سايتوبلازم الخلايا المجاورة."
+        },
+        {
+            qEn: "Nostoc lack flagella and asexual reproduction.",
+            qAr: "يفتقر النوستوك إلى الأسواط والتكاثر اللاجنسي.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن طحلب النوستوك (Nostoc) يفتقر بالفعل إلى الأسواط والتكاثر الجنسي، لكنه يتكاثر لاجنسياً (Asexually) بكفاءة عبر التجزئة (Fragmentation) وتكوين الهرموجونيا، والأبواغ الداخلية، والخلايا الساكنة (Akinetes).",
+            terms: "تعريف المصطلحات:\nNostoc (النوستوك): جنس من البكتيريا الزرقاء (السيانوباكتيريا) الخيطية التي تكون مستعمرات هلامية.\nAsexual reproduction (التكاثر اللاجنسي): عملية إنتاج أفراد جديدة دون الحاجة لاندماج الأمشاج، وتتم في النوستوك بعدة طرق خضرية.\nFlagella (الأسواط): زوائد حركية تفتقر إليها البكتيريا الزرقاء تماماً في جميع مراحل دورة حياتها."
+        },
+        {
+            qEn: "Diatomite is fire proof and highly adsorbent.",
+            qAr: "الدياتوميت مقاوم للنار وشديد الامتصاص.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث يُستخرج الدياتوميت (Diatomite) من الصخور أو التربة الدياتومية، ويتميز بخصائصه المقاومة للنار (Fire proof) وقدرته العالية على الامتصاص (Highly adsorbent)، مما يجعله مفيداً في الفلاتر وصناعة الديناميت.",
+            terms: "تعريف المصطلحات:\nDiatomite (الدياتوميت/التربة الدياتومية): صخور رسوبية سيليكية تتكون من تراكم بقايا جدران الخلايا الدياتومية وتُستخدم صناعياً.\nAdsorbent (مادة مازة/ممتصة): مادة قادرة على جذب والاحتفاظ بالسوائل أو الغازات على سطحها بكفاءة."
+        },
+        {
+            qEn: "Fucus is called rockweed because it founds attached to rocks along the shores.",
+            qAr: "يُسمى الفوكاس بعشب الصخور لأنه يوجد ملتصقاً بالصخور على طول الشواطئ.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث أن طحلب الفوكاس (Fucus) هو طحلب بحري بُني يعيش في المياه الباردة، ويُعرف باسم عشب الصخور (Rockweed) نتيجة لنموه وتثبته القوي بالصخور الساحلية.",
+            terms: "تعريف المصطلحات:\nFucus (الفوكاس): جنس من الطحالب البنية البحرية الكبيرة التي تنمو في المناطق الساحلية وتمتلك تركيباً معقداً.\nRockweed (عشب الصخور): مصطلح عام يُطلق على طحلب الفوكاس نظراً لنموه على الصخور الشاطئية باستخدام ماسك (Holdfast)."
+        },
+        {
+            qEn: "The male gametes (spermatia) in red algae are flagellated.",
+            qAr: "الأمشاج الذكرية (سبيرماتيا) في الطحالب الحمراء تكون مسوطة.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن الطور المشيجي الذكري في الطحالب الحمراء يُنتج أمشاجاً ذكرية غير متحركة وتفتقر تماماً للأسواط، وتُعرف باسم (Spermatia)، حيث تعتمد على تيارات الماء للانتقال نحو العضو الأنثوي.",
+            terms: "تعريف المصطلحات:\nSpermatia (سبيرماتيا): خلايا جنسية ذكرية (أمشاج) متخصصة تفتقر للأسواط، وتُنتجها الطحالب الحمراء.\nFlagellated (مسوطة): تمتلك زوائد حركية خيطية (أسواط) تُستخدم للسباحة، وهي صفة غائبة في الطحالب الحمراء."
+        },
+        {
+            qEn: "There is a dominant sporophyte phase in bryophytes during their life cycle.",
+            qAr: "يوجد طور جرثومي سائد في الحزازيات (البرياويات) خلال دورة حياتها.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن الطور السائد (Dominant phase) والمستقل في دورة حياة الحزازيات (Bryophytes) هو الطور المشيجي (Gametophyte) أحادي الصيغة الصبغية، بينما يكون الطور الجرثومي قصير العمر ومعتمداً في غذائه على الطور المشيجي.",
+            terms: "تعريف المصطلحات:\nDominant phase (الطور السائد): المرحلة الأطول والأكثر وضوحاً واستقلالية في دورة حياة الكائن الذي يعاني تعاقب أجيال.\nGametophyte (الطور المشيجي): النبات أحادي الصيغة الصبغية (n) الذي ينتج الأمشاج ويمثل الطور الأساسي في الحزازيات.\nSporophyte (الطور الجرثومي): النبات ثنائي الصيغة الصبغية (2n) المعتمد في الحزازيات والذي ينتج الأبواغ."
+        },
+        {
+            qEn: "Heterocysts are concerned with nitrogen fixation.",
+            qAr: "الحويصلات المتباينة (الخلايا المغايرة) معنية بتثبيت النيتروجين.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث تمتلك العديد من البكتيريا الزرقاء الخيطية خلايا متخصصة تُعرف بالحويصلات المتباينة (Heterocysts)، والتي تعتبر المواقع الأساسية المسؤولة عن عملية تثبيت النيتروجين الجوي (Nitrogen fixation).",
+            terms: "تعريف المصطلحات:\nHeterocysts (الحويصلات المتباينة/المغايرة): خلايا متخصصة ذات جدران سميكة توجد في بعض خيوط البكتيريا الزرقاء وتعمل كمواقع لتثبيت النيتروجين الجوي.\nNitrogen fixation (تثبيت النيتروجين): عملية حيوية لتحويل غاز النيتروجين الجوي الخامل إلى مركبات نيتروجينية عضوية قابلة للاستخدام الخلوي."
+        },
+        {
+            qEn: "The gametophyte and tetrasporophyte are heteromorphic in Polysiphonia.",
+            qAr: "الطور المشيجي والطور الجرثومي الرباعي يكونان متبايني الشكل في البوليسيفونيا.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن الطور الجرثومي الرباعي (Tetrasporophyte) في طحلب البوليسيفونيا (Polysiphonia) يكون متطابقاً ومماثلاً شكلياً للطور المشيجي الحر (Isomorphic)، وليس متبايناً في الشكل (Heteromorphic).",
+            terms: "تعريف المصطلحات:\nTetrasporophyte (الطور الجرثومي الرباعي): طور ثنائي الصيغة الصبغية (2n) في الطحالب الحمراء يُنتج أبواغاً رباعية من خلال الانقسام الميوزي.\nIsomorphic (متشابه الشكل): حالة التماثل التام في البنية المورفولوجية بين الأطوار المختلفة في دورة الحياة.\nHeteromorphic (متباين الشكل): اختلاف واضح في البنية الشكلية بين الأطوار (كما في طحلب الفيلوفورا)."
+        },
+        {
+            qEn: "Riccia species grow extensively along the Nile banks in autumn.",
+            qAr: "تنمو أنواع الريشيا بكثافة على طول ضفاف النيل في فصل الخريف.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث يُعد نبات الريشيا (Riccia) من النباتات الكبدية (Liverworts) المنبطحة والتي تنمو وتزدهر بكثافة على امتداد ضفاف نهر النيل (Nile banks) خلال فصل الخريف في البيئات الرطبة.",
+            terms: "تعريف المصطلحات:\nRiccia (الريشيا): جنس من الحزازيات المنبطحة (النباتات الكبدية) يمتلك ثالوساً بسيطاً متفرعاً وينمو في البيئات الرطبة.\nLiverworts (النباتات الكبدية): مجموعة من الحزازيات اللاوعائية تتميز بأجسام مسطحة (ثالوس) وتفضل الأماكن المظللة والرطبة."
+        },
+        {
+            qEn: "The cellulose envelope would hinder the cell division.",
+            qAr: "الغلاف السيليلوزي من شأنه أن يعيق انقسام الخلية.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن العائق الفعلي أمام التمدد وانقسام الخلية في الدياتومات (Diatoms) هو الغلاف السيليكوني الصلب (Silica envelope) المُشبع بالسيليكا، وليس الغلاف السيليلوزي.",
+            terms: "تعريف المصطلحات:\nSilica envelope (الغلاف السيليكوني/الصدفة): جدار خلوي زجاجي صلب يتكون من نصفين متداخلين يحدان من تمدد الخلية وانقسامها المعتاد في الدياتومات.\nCell division (انقسام الخلية): عملية حيوية تتكاثر فيها الخلية لإنتاج خلايا جديدة لتكوين الجيل القادم."
+        },
+        {
+            qEn: "Akinetes may survive for years in darkness and under dry conditions.",
+            qAr: "الأكينيتات (الخلايا الساكنة) يمكنها البقاء لسنوات في الظلام وتحت الظروف الجافة.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) لأن الأكينيتات (Akinetes) عبارة عن خلايا خضرية تخصصت كأبواغ راحة ذات جدران سميكة ومخزون غذائي عالٍ، مما يتيح لها مقاومة الظروف القاسية والجفاف والبقاء لسنوات طوال قبل الإنبات.",
+            terms: "تعريف المصطلحات:\nAkinetes (الأكينيتات/الخلايا الساكنة): أبواغ راحة ذات جدران سميكة وممتلئة بالغذاء تُنتجها بعض البكتيريا الزرقاء للبقاء خلال فترات الإجهاد البيئي الطويلة."
+        },
+        {
+            qEn: "The chloroplasts in Vaucheria are located on the center of the cytoplasm.",
+            qAr: "توجد البلاستيدات الخضراء في الفوشيريا في مركز السيتوبلازم.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأنه في طحلب الفوشيريا (Vaucheria)، تتوزع البلاستيدات الخضراء (Chloroplasts) في المنطقة المحيطية (Periphery) من السيتوبلازم قريباً من الجدار الخلوي، بينما تتجمع الأنوية باتجاه المركز بالقرب من الفجوة.",
+            terms: "تعريف المصطلحات:\nVaucheria (الفوشيريا): طحلب خيطي مدمج خلوي ينتمي للطحالب الصفراء المخضرة (Xanthophyceae) يخزن غذاءه على هيئة زيوت.\nPeriphery (المحيط): المنطقة الخارجية أو الحافة السيتوبلازمية التي تتركز فيها البلاستيدات للتعرض الأمثل للضوء."
+        },
+        {
+            qEn: "Formation of spores occurred only in some filamentous forms.",
+            qAr: "تكوين الأبواغ حدث فقط في بعض الأشكال الخيطية.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) حيث يقتصر تكوين الأبواغ (Spore formation) كنوع من التكاثر اللاجنسي في البكتيريا الزرقاء (Cyanobacteria) على بعض الأشكال وحيدة الخلية (Unicellular forms) مثل (Dermocarpa) و(Chamaesiphon)، وليس الأشكال الخيطية.",
+            terms: "تعريف المصطلحات:\nSpore formation (تكوين الأبواغ): آلية تكاثر لاجنسي تعتمد على تكوين أبواغ داخلية أو خارجية لتكوين أفراد خضرية جديدة.\nUnicellular forms (الأشكال وحيدة الخلية): كائنات دقيقة تتكون من خلية واحدة مستقلة تقوم بجميع الوظائف بما فيها الإنتاج البوغي."
+        },
+        {
+            qEn: "Heterokontophyta cell wall of is often composed of cellulose.",
+            qAr: "يتكون الجدار الخلوي للـ (هيتيروكونتوفيتا) غالباً من السيليلوز.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث يتكون الجدار الخلوي في مجموعة الهيتيروكونتوفيتا (Heterokontophyta)، والتي تضم طحالب متباينة الأسواط وبعض أشباه الفطريات، غالباً من مادة السيليلوز (Cellulose) ولا يحتوي على الكيتين الفطري.",
+            terms: "تعريف المصطلحات:\nHeterokontophyta (هيتيروكونتوفيتا): مجموعة تصنيفية واسعة تضم كائنات تمتلك أسواطاً متباينة الطول والتركيب كالفطريات البيضية والدياتومات والطحالب البنية.\nCellulose (السيليلوز): كربوهيدرات معقدة بنائية تُشكل المكون الأساسي لجدران خلايا النباتات والعديد من الطحالب."
+        },
+        {
+            qEn: "In the center of Funaria capsule, there is large-celled tissue known as the columella.",
+            qAr: "في مركز كبسولة الفيوناريا، يوجد نسيج ذو خلايا كبيرة يُعرف بالعميد (الكولوميلا).",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث يحتوي المركز الداخلي للكبسولة الجرثومية البيضاوية في حزاز الفيوناريا (Funaria) على نسيج مركزي عقيم مكون من خلايا كبيرة يُسمى الكولوميلا (Columella)، ويحيط به النسيج المولد للأبواغ.",
+            terms: "تعريف المصطلحات:\nFunaria (الفيوناريا): نوع من الحزازيات الحقيقية (Mosses) يمتلك كبسولة بوغية متطورة التكوين المورفولوجي.\nColumella (الكولوميلا/العميد): نسيج مركزي عقيم يعمل كدعامة ميكانيكية داخل كبسولة الأبواغ.\nCapsule (الكبسولة/العلبة): الجزء العلوي المنتفخ من الطور الجرثومي حيث تتكون وتنضج الأبواغ."
+        },
+        {
+            qEn: "In Riccia, foot acts to absorb food from gametophyte.",
+            qAr: "في الريشيا، تعمل القدم على امتصاص الغذاء من الطور المشيجي.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن الطور الجرثومي في الريشيا (Riccia) هو أبسط الأطوار الجرثومية إطلاقاً ويفتقر تماماً لوجود القدم (Foot) والعنق، فكل أنسجته الداخلية خصبة منتجة للأبواغ، بينما توجد القدم الماصة في حزاز الفيوناريا.",
+            terms: "تعريف المصطلحات:\nFoot (القدم): تركيب قاعدي في الطور الجرثومي لبعض الحزازيات يغوص في نسيج الطور المشيجي لامتصاص ونقل الغذاء.\nGametophyte (الطور المشيجي): النبات الحامل للأمشاج، ويوفر الحماية والغذاء للطور الجرثومي الناشئ."
+        },
+        {
+            qEn: "Sphagnum mosses used as first aid dressings on soldiers' wounds.",
+            qAr: "استُخدمت حزازيات الإسفاجنم كضمادات للإسعافات الأولية على جروح الجنود.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث استُخدمت حزازيات الإسفاجنم (Sphagnum mosses) خلال الحرب العالمية كضمادات للجروح نظراً لقدرتها العالية جداً على الامتصاص (Absorbent) واحتوائها على خصائص خفيفة مضادة للبكتيريا (Antibacterial properties).",
+            terms: "تعريف المصطلحات:\nSphagnum mosses (حزازيات الإسفاجنم): حزازيات تُعرف بـ (حشائش الخث) تنمو بكثافة في المستنقعات ولديها قدرة فائقة على الاحتفاظ بالسوائل.\nAntibacterial properties (خصائص مضادة للبكتيريا): القدرة الكيميائية البيولوجية على منع نمو الميكروبات المسببة للالتهابات في الجروح."
+        }
+    ];
+
+    const container = document.getElementById('quiz-container');
+
+    quizData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        // Question texts
+        const qEn = document.createElement('div');
+        qEn.className = 'question-text';
+        qEn.textContent = `${index + 1}. ${item.qEn}`;
+        
+        const qAr = document.createElement('div');
+        qAr.className = 'question-ar';
+        qAr.textContent = item.qAr;
+
+        // Options
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'options-grid';
+        
+        // Explanation toggle and content
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'explanation-toggle';
+        toggleBtn.textContent = '📖 Show Explanation & Terms (إظهار الشرح والمصطلحات)';
+        
+        const expContent = document.createElement('div');
+        expContent.className = 'explanation-content';
+        
+        const expText = document.createElement('div');
+        expText.className = 'explanation-text';
+        expText.textContent = item.explanation;
+        
+        const termsText = document.createElement('div');
+        termsText.className = 'terms-text';
+        termsText.textContent = item.terms;
+
+        expContent.appendChild(expText);
+        expContent.appendChild(termsText);
+
+        // Logic for answering
+        const buttons = [];
+        item.options.forEach((optText, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = optText;
+            
+            btn.addEventListener('click', () => {
+                // Disable all buttons in this card after clicking
+                buttons.forEach(b => b.disabled = true);
+                
+                if (optIndex === item.correctIndex) {
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('wrong');
+                    // Highlight the correct one
+                    buttons[item.correctIndex].classList.add('correct');
+                }
+                
+                // Show the explanation toggle
+                toggleBtn.style.display = 'block';
+            });
+            
+            buttons.push(btn);
+            optionsGrid.appendChild(btn);
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            expContent.classList.toggle('visible');
+            toggleBtn.textContent = expContent.classList.contains('visible') 
+                ? '📖 Hide Explanation (إخفاء الشرح)' 
+                : '📖 Show Explanation & Terms (إظهار الشرح والمصطلحات)';
+        });
+
+        card.appendChild(qEn);
+        card.appendChild(qAr);
+        card.appendChild(optionsGrid);
+        card.appendChild(toggleBtn);
+        card.appendChild(expContent);
+
+        container.appendChild(card);
+    });
+</script>
+</body>
+</html>
