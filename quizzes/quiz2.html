@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biology & Taxonomy Quiz - Part 2</title>
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --primary-hover: #2c974b;
+            --bg-color: #f6f8fa;
+            --card-bg: #ffffff;
+            --text-main: #24292e;
+            --text-muted: #586069;
+            --border: #e1e4e8;
+            --correct-bg: #d4edda;
+            --correct-border: #c3e6cb;
+            --correct-text: #155724;
+            --wrong-bg: #f8d7da;
+            --wrong-border: #f5c6cb;
+            --wrong-text: #721c24;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-ar {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            direction: rtl;
+            text-align: right;
+            border-right: 3px solid var(--border);
+            padding-right: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-btn {
+            background-color: #fcfcfc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f0f3f6;
+            border-color: #d1d5da;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+            font-weight: 600;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: var(--wrong-text);
+        }
+
+        .explanation-toggle {
+            background: none;
+            border: none;
+            color: #0366d6;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0;
+            font-weight: 600;
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .explanation-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .explanation-content {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            direction: rtl;
+            text-align: right;
+        }
+
+        .explanation-content.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-text {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .terms-text {
+            white-space: pre-line;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Biology Interactive Review - Part 2</h1>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            qEn: "The cell walls of brown algae contain ......... and .........",
+            qAr: "تحتوي الجدران الخلوية للطحالب البنية على ......... و .........",
+            options: ["A- Chitin - Cellulose", "B- Silica - Cellulose", "C- Muramic - Alginic acid", "D- Alginic - Fucinic acid"],
+            correctIndex: 3,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (D) حيث تمتلك الخلايا الخضرية للطحالب البنية جداراً سيليلوزياً (Cellulosic wall) مغطى من الخارج بطبقة هلامية (Gelatinous coating). تتكون هذه الطبقة الخارجية بشكل أساسي من حمض الألجنيك وحمض الفوسينيك (Alginic and Fucinic acids). تعتبر هذه المكونات مميزة جداً لحماية الطحالب البنية ودعمها في بيئاتها البحرية.",
+            terms: "تعريف المصطلحات:\nCellulosic wall (الجدار السيليلوزي): جدار خلوي يتكون بشكل أساسي من مادة السيليلوز التي توفر الدعامة الهيكلية للخلية النباتية والطحلبية.\nGelatinous coating (غطاء هلامي): طبقة لزجة خارجية تحيط بالخلايا تعمل كغلاف وقائي لحمايتها من الجفاف والمؤثرات الميكانيكية البيئية.\nAlginic and Fucinic acids (أحماض الألجنيك والفوسينيك): مركبات كيميائية معقدة (سكريات متعددة) توجد في الجدر الخلوية للطحالب البنية ولها أهمية تجارية كبرى."
+        },
+        {
+            qEn: "Slime molds are now classified in kingdom .........",
+            qAr: "تُصنف الفطريات الغروية الآن ضمن مملكة .........",
+            options: ["A- Protista", "B- Plantae", "C- Fungi", "D- Animalia"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) حيث تُصنف الفطريات الغروية (Slime molds) أو ما يُعرف بـ (Mycetozoa) حالياً ضمن مملكة الطلائعيات (Protista). على الرغم من تشابهها الشكلي مع الفطريات الحقيقية في بعض مراحل حياتها، إلا أنها تتميز بوجود طور خضري يُعرف بالبلازموديوم (Plasmodium) يفتقر لجدار خلوي حقيقي وتتغذى بالبلعمة.",
+            terms: "تعريف المصطلحات:\nSlime molds (الفطريات الغروية): كائنات حية دقيقة تشبه الفطريات في إنتاج الأبواغ، لكنها تُصنف ضمن الطلائعيات نظراً لأسلوب تغذيتها وتركيبها.\nProtista (الطلائعيات): مملكة تصنيفية تضم كائنات حقيقية النواة غير متجانسة، لا تندرج تحت تصنيف الحيوانات أو النباتات أو الفطريات الحقيقية.\nPlasmodium (البلازموديوم): كتلة بروتوبلازمية متحركة ومتعددة الأنوية تفتقر للجدار الخلوي وتمثل الطور الخضري الأساسي في الفطريات الغروية."
+        },
+        {
+            qEn: "Lichens are a symbiotic relationship between ......... and .........",
+            qAr: "الأشنات هي علاقة تكافلية بين ......... و .........",
+            options: ["A- Fungi - Algae", "B- Fungi - Bacteria", "C- Algae - Protozoa", "D- Fungi - Fungi"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) وليس (C) كما أشرت، لأن الأشنات (Lichens) عبارة عن ارتباط تكافلي (Symbiotic relationship) مستقر بين الفطر (Mycobiont) والطحلب الأخضر (Photobiont). يُشكل الشريك الفطري أكثر من 95% من الأنواع في هذه العلاقة التي توفر فيها الفطريات الحماية والماء، بينما توفر الطحالب الغذاء عبر البناء الضوئي.",
+            terms: "تعريف المصطلحات:\nLichens (الأشنات): كائنات مركبة تنشأ من تعايش تكافلي دائم بين فطر وطحلب (أو بكتيريا مزرقة) ليعيشا ككائن واحد.\nSymbiotic relationship (علاقة تكافلية): تفاعل بيولوجي وثيق وطويل الأمد بين كائنين حيين مختلفين يتبادلان المنفعة من أجل البقاء.\nMycobiont & Photobiont (الشريك الفطري والشريك الضوئي): الفطر الذي يمثل البنية الأساسية للأشنة، والطحلب المسؤول عن عملية البناء الضوئي."
+        },
+        {
+            qEn: "......... is the main pigment masking chlorophyll in brown algae.",
+            qAr: "......... هي الصبغة الرئيسية التي تحجب الكلوروفيل في الطحالب البنية.",
+            options: ["A- Chlorophyll c", "B- Xanthophyll", "C- Phycoerythrin", "D- β-carotene"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (B) حيث تتدرج ألوان الطحالب البنية (Phaeophyceae) من اللون الأخضر الزيتوني إلى البني بمختلف درجاته. يعتمد هذا اللون بشكل تام على سيادة صبغة الزانثوفيل (Xanthophylls) المساعدة، والتي تقوم بعملية حجب (Masking) لون صبغتي الكلوروفيل (أ) و (ج) داخل البلاستيدات.",
+            terms: "تعريف المصطلحات:\nBrown algae (الطحالب البنية): طحالب بحرية متعددة الخلايا تنتمي لطائفة (Phaeophyceae) تتميز بلونها البني وتركيبها المعقد.\nXanthophyll (الزانثوفيل): صبغة مساعدة صفراء اللون أو بنية، تلعب دوراً مهماً في التقاط الضوء أثناء البناء الضوئي وتطغى على لون الكلوروفيل.\nMasking (الحجب أو التغطية): التغلب اللوني لصبغة معينة (بسبب وفرتها الكبيرة) على صبغة أخرى متواجدة معها داخل نفس الخلية."
+        },
+        {
+            qEn: "The highest taxonomic rank in modern classification is .........",
+            qAr: "أعلى مرتبة تصنيفية في التصنيف الحديث هي .........",
+            options: ["A- Kingdom", "B- Domain", "C- Phylum", "D- Division"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (B) حيث تم تسليط الضوء على الأهمية التطورية والانقسام الجذري بين البكتيريا الحقيقية والبكتيريا القديمة. أدى ذلك إلى اعتماد مرتبة تصنيفية فائقة تعلو الممالك تُسمى النطاق (Domain) في أحدث النظم البيولوجية.",
+            terms: "تعريف المصطلحات:\nTaxonomic rank (المرتبة التصنيفية): مستوى هرمي قياسي يُستخدم لفرز وتصنيف الكائنات الحية بناءً على الخصائص التطورية والمورفولوجية.\nDomain (النطاق): أعلى مرتبة تصنيفية تم اقتراحها لتجميع الكائنات الحية في ثلاث مجموعات كبرى (البكتيريا، العتائق، وحقيقيات النواة).\nKingdom (المملكة): مرتبة تصنيفية كبرى كانت تُعتبر الأعلى سابقاً، وهي تأتي حالياً في الترتيب مباشرة تحت مرتبة \"النطاق\"."
+        },
+        {
+            qEn: "......... is the scientist developed the two-domain system.",
+            qAr: "......... هو العالم الذي طور نظام النطاقين.",
+            options: ["A- Linnaeus", "B- Whittaker", "C- Darwin", "D- Carl Woese"],
+            correctIndex: 3,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (D) حيث اقترح العالم كارل ووز (Carl Woese) في عام 1981 نظام التصنيف الحديث المعتمد على النطاقات. قسّم هذا النظام عالم الكائنات الحية إلى نطاقين رئيسيين (Two-domain system) هما: نطاق بدائيات النواة ونطاق حقيقيات النواة، لإعطاء الدقة التطورية حقها.",
+            terms: "تعريف المصطلحات:\nTwo-domain system (نظام النطاقين): نظام تصنيفي حديث يقسم كافة الكائنات الحية إلى مجموعتين (نطاقين) كبريين بناءً على التركيب الخلوي وتطور الجينات.\nProkaryotic & Eukaryotic (بدائيات وحقيقيات النواة): التقسيم الخلوي الذي يعتمد على وجود أو غياب الغلاف النووي والعضيات الغشائية المعقدة."
+        },
+        {
+            qEn: "The plasmodial slime molds feed by .........",
+            qAr: "تتغذى الفطريات الغروية البلازموديومية عن طريق .........",
+            options: ["A- Phagocytosis", "B- Parasitism", "C- Absorption", "D- Photosynthesis"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) حيث تعتمد الفطريات الغروية (Slime molds) في نظامها الغذائي بشكل رئيسي على عملية البلعمة (Phagocytosis). يتغذى الطور الخضري المسمى البلازموديوم (Plasmodium) عن طريق الإحاطة وابتلاع البكتيريا والخلايا الفطرية وغيرها من المواد العضوية الصلبة من محيطه.",
+            terms: "تعريف المصطلحات:\nPhagocytosis (البلعمة): عملية حيوية خلوية تقوم فيها الخلية بابتلاع الجزيئات الصلبة أو الكائنات الدقيقة لتكوين فجوة غذائية وهضمها داخلياً.\nPlasmodial slime molds (الفطريات الغروية البلازموديومية): نوع من الطلائعيات التي تعيش ككتلة بروتوبلازمية وتتحرك كالأميبا لتتغذى."
+        },
+        {
+            qEn: "The major product of diatom photosynthesis is .........",
+            qAr: "الناتج الرئيسي لعملية البناء الضوئي في الدياتومات هو .........",
+            options: ["A- Oil", "B- Starch", "C- Cellulose", "D- Glucose"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) حيث تُعد الزيوت (Oil and fat) المنتج التخزيني الأساسي والرئيسي لعملية البناء الضوئي في الدياتومات (Diatoms). تمثل هذه الزيوت مصدراً هاماً لإنتاج الطاقة، وتلعب الدياتومات بفضلها دوراً محورياً كأساس للسلاسل الغذائية المائية وكثروة للطاقة.",
+            terms: "تعريف المصطلحات:\nDiatoms (الدياتومات): طحالب مجهرية وحيدة الخلية تتميز بجدران خلوية مكونة من السيليكا (Frustule) تنتمي لطائفة الباسيلاريوفيتا.\nPhotosynthesis (البناء الضوئي): العملية الحيوية التي تحول بها النباتات والطحالب ضوء الشمس إلى طاقة كيميائية تُخزن كمركبات عضوية."
+        },
+        {
+            qEn: "Commercial agar is produced from .........",
+            qAr: "يتم إنتاج الأجار التجاري من .........",
+            options: ["A- Nostoc", "B- Chlamydomonas", "C- Gelidium", "D- Fucus"],
+            correctIndex: 2,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (C) حيث يُستخرج الأجار التجاري (Commercial agar) وهو منتج حيوي بالغ الأهمية من بعض الأنواع المتخصصة للطحالب الحمراء (Rhodophyta). يُعتبر جيليديوم (Gelidium) وجراسيلاريا من أبرز الأجناس التي تُستخدم تجارياً لإنتاج هذا المستخلص الهلامي للاستخدامات المعملية والغذائية.",
+            terms: "تعريف المصطلحات:\nCommercial agar (الأجار التجاري): مادة هلامية متعددة السكريات تستخدم كوسط صلب لزراعة الكائنات الدقيقة في المعامل وكعامل مكثف في الأغذية.\nRed algae (الطحالب الحمراء): طحالب بحرية تنتمي لشعبة (Rhodophyta) تتميز بصبغاتها الحمراء وقدرتها على تخليق مواد هيدروكولويدية معقدة."
+        },
+        {
+            qEn: "Algae secreting calcium carbonate for coral reefs are called .........",
+            qAr: "الطحالب التي تفرز كربونات الكالسيوم للشعاب المرجانية تسمى .........",
+            options: ["A- Coralline algae", "B- Chlorophyta", "C- Charophyta", "D- Diatoms"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) حيث تقوم فئة هامة من الطحالب الحمراء بإفراز وترسيب كربونات الكالسيوم (Calcium carbonate) على السطح الخارجي لخلاياها. تُعرف هذه الطحالب ذات الهيكل الصلب باسم الطحالب المرجانية (Coralline algae)، وهي تساهم بشكل رئيسي في ترسيخ واستدامة الشعاب المرجانية.",
+            terms: "تعريف المصطلحات:\nCoralline algae (الطحالب المرجانية): مجموعة محددة من الطحالب الحمراء التي تمتلك جدراناً خلوية متكلسة نتيجة ترسب كربونات الكالسيوم لتكوين هياكل صلبة.\nCalcium carbonate (كربونات الكالسيوم): مركب كيميائي هيكلي صلب تفرزه الطحالب والمرجانيات لبناء أصدافها وهياكلها الدعامية."
+        },
+        {
+            qEn: "Chlamydomonas reproduces asexually by forming .........",
+            qAr: "يتكاثر الكلاميدوموناس لاجنسياً عن طريق تكوين .........",
+            options: ["A- Akinetes", "B- Aplanospores", "C- Zygospores", "D- Zoospores"],
+            correctIndex: 3,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (D) حيث يتكاثر طحلب الكلاميدوموناس (Chlamydomonas) لاجنسياً في الظروف الملائمة عن طريق إنتاج جراثيم متحركة عارية تمتلك سوطين تُعرف بالجراثيم السابحة (Zoospores). تنقسم الخلية الأم داخلياً لإنتاج هذه الجراثيم التي تنطلق لتنمو بحرية إلى خلايا بالغة جديدة.",
+            terms: "تعريف المصطلحات:\nZoospores (الجراثيم السابحة): أبواغ تكاثرية لاجنسية متحركة تمتلك أسواطاً تسمح لها بالسباحة والتنقل النشط في الأوساط المائية.\nAsexual reproduction (التكاثر اللاجنسي): عملية إنتاج الجيل الجديد من كائن حي واحد دون الحاجة لاندماج أمشاج أو تغير في الصيغة الصبغية."
+        },
+        {
+            qEn: "Volvox aureus zygotes are distinguished by their .........",
+            qAr: "تتميز لاقحات فولفوكس أوريوس بـ .........",
+            options: ["A- Star shape", "B- Smooth surface", "C- Multiple flagella", "D- Red pigment"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (B) حيث تُعد لاقحات (Zygotes) طحلب الفولفوكس خلايا شديدة التحمل تساعد الكائن على البقاء خلال الظروف البيئية القاسية كفصل الشتاء. ويُمكن التمييز تصنيفياً بين الأنواع؛ حيث تمتلك لاقحات (Volvox aureus) جداراً ذا سطح أملس (Smooth surface) مقارنة بغيرها ذات السطح النجمي.",
+            terms: "تعريف المصطلحات:\nZygote (اللاقحة/الزيجوت): الخلية الناتجة عن اندماج المشيج المذكر والمؤنث أثناء التكاثر الجنسي، وتتميز غالباً بجدار سميك لمقاومة الظروف غير الملائمة.\nSmooth surface (سطح أملس): سمة شكلية لجدار الخلية الخارجي يُعتمد عليها للتفريق بين أنواع الفولفوكس لتصنيفها بدقة."
+        },
+        {
+            qEn: "The asexual reproduction occurred in lichen by .........",
+            qAr: "يحدث التكاثر اللاجنسي في الأشنات عن طريق .........",
+            options: ["A- Isidia", "B- Soredia", "C- A & B", "D- Oogamy"],
+            correctIndex: 2,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (C) حيث يحدث التكاثر اللاجنسي (Asexual reproduction) أو الخضري في الأشنات بطريقتين رئيسيتين: الإيزيديا (Isidia) وهي امتدادات دقيقة منتصبة من السطح، والسوريديا (Soredia) وهي تجمعات وحبيبات غير قشرية، وكلاهما يحتوي على الشريكين الفطري والضوئي معاً لتكوين أشنة جديدة.",
+            terms: "تعريف المصطلحات:\nIsidia (الإيزيديا): بروزات إصبعية دقيقة ومغطاة بالقشرة تنفصل عن سطح الأشنة لتعمل كوحدات للتكاثر الخضري المستقل.\nSoredia (السوريديا): حبيبات مسحوقية دقيقة تتكون من خلايا طحلبية متشابكة مع خيوط فطرية، وتنتشر بواسطة الرياح للتكاثر السريع."
+        },
+        {
+            qEn: "The cyanophyta is called myxophyta because the presence of .........",
+            qAr: "تُسمى الطحالب الخضراء المزرقة (سيانوفيتا) بـ (ميكسوفيتا) لوجود .........",
+            options: ["A- Capsule", "B- Cell wall", "C- Plasma membrane", "D- Mucilaginous sheath"],
+            correctIndex: 3,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (D) حيث يُطلق على البكتيريا الزرقاء (Cyanophyta) اسم (Myxophyta) نظراً لامتلاكها غلافاً هلامياً أو غمدة مخاطية (Mucilaginous sheath) يحيط بخلاياها من الخارج. يمنح هذا الغلاف الجيلاتيني الطحلب مظهره اللزج المميز ويوفر له حماية بالغة من الجفاف والظروف الخارجية.",
+            terms: "تعريف المصطلحات:\nMucilaginous sheath (الغمد المخاطي/الهلامي): طبقة إفرازية خارجية تتكون من سكريات متعددة لزجة ومخاطية تحيط بالخلايا لدعمها وحمايتها من العوامل القاسية.\nCyanophyta (البكتيريا الزرقاء): بدائيات نواة تتمتع بالقدرة على إتمام عملية البناء الضوئي وإطلاق الأكسجين، وتُعرف تاريخياً بالطحالب الخضراء المزرقة."
+        },
+        {
+            qEn: "......... proposed a fourth Kingdom (Monera) for the prokaryotic.",
+            qAr: "......... اقترح المملكة الرابعة (مونيرا) لبدائيات النواة.",
+            options: ["A- Copeland", "B- Whittaker", "C- Carl Woese", "D- Linnaeus"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) حيث اقترح العالم هربرت كوبلاند (Copeland) في عام 1938 خطوة تطورية في التصنيف بوضع مملكة رابعة منفصلة (Fourth Kingdom) مخصصة للكائنات الحية بدائية النواة (Prokaryotes). أطلق على هذه المملكة الجديدة اسم (Monera) لتمييزها عن الكائنات حقيقية النواة.",
+            terms: "تعريف المصطلحات:\nMonera (مونيرا): مملكة تصنيفية تاريخية كانت تُستخدم لتجميع ودمج كافة الكائنات الحية الدقيقة بدائية النواة (مثل البكتيريا) تحت تصنيف واحد.\nProkaryotes (بدائيات النواة): كائنات حية دقيقة تفتقر خلاياها لوجود غشاء نووي فاصل يحيط بالمادة الوراثية وتفتقر للعضيات الخلوية الغشائية."
+        },
+        {
+            qEn: "Centric diatoms are .........",
+            qAr: "الدياتومات المركزية تكون .........",
+            options: ["A- Motile", "B- Non-motile", "C- Flagellated", "D- Gliding"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (B) حيث أن الدياتومات المركزية (Centric diatoms) ذات التماثل الإشعاعي تفتقر تماماً للقدرة على الحركة وتكون غير متحركة (Non-motile). في المقابل، تتمتع بعض الدياتومات الريشية (Pennate) بحركة انزلاقية بطيئة (Gliding) نظراً لامتلاكها تركيباً خاصاً يُعرف باسم الشق (Raphe).",
+            terms: "تعريف المصطلحات:\nCentric diatoms (الدياتومات المركزية): مجموعة تصنيفية من الدياتومات تتخذ أشكالاً دائرية أو أسطوانية وتمتلك تماثلاً شعاعياً ولا تمتلك أجهزة للحركة.\nNon-motile (غير متحركة): صفة فسيولوجية للخلايا أو الكائنات التي تعجز عن توليد حركة ذاتية وتعتمد على تيارات الماء للانتقال."
+        },
+        {
+            qEn: "......... is the pigment present only in cyanobacteria and red algae.",
+            qAr: "......... هي الصبغة الموجودة فقط في البكتيريا الزرقاء والطحالب الحمراء.",
+            options: ["A- Phycoerythrin", "B- Fucoxanthin", "C- Phycocyanin", "D- Cyanophycean"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) حيث تنفرد البكتيريا الزرقاء والطحالب الحمراء بوجود مجموعة صبغات الفيكوبيلينات الفريدة. من أبرز هذه الصبغات المذكورة في الخيارات هي صبغة الفيكوإريثرين (Phycoerythrin) الحمراء، والتي تلعب دوراً جوهرياً في امتصاص الطاقة الضوئية بكفاءة عالية في البيئات المائية العميقة.",
+            terms: "تعريف المصطلحات:\nPhycoerythrin (الفيكوإريثرين): صبغة بروتينية مساعدة ذات لون أحمر توجد بكثافة في الطحالب الحمراء والبكتيريا الزرقاء وتلتقط الأطوال الموجية الزرقاء.\nPhycobilins (الفيكوبيلينات): مجموعة متخصصة من الصبغات المساعدة القابلة للذوبان في الماء والتي تحسن كفاءة عملية البناء الضوئي."
+        },
+        {
+            qEn: "......... contains all of the amino acids essential for humans and its protein content is high.",
+            qAr: "......... تحتوي على جميع الأحماض الأمينية الأساسية للإنسان ونسبة البروتين بها عالية.",
+            options: ["A- Chlamydomonas", "B- Oscillatoria", "C- Spirulina", "D- B and C"],
+            correctIndex: 2,
+            explanation: "شرح الإجابة: الإجابة الصحيحة استناداً للحقائق العلمية هي (C) السبيرولينا (Spirulina)، وهي بكتيريا زرقاء متميزة بقيمتها الغذائية العالية عالمياً لاحتوائها على كافة الأحماض الأمينية الضرورية للبشر. (ملاحظة توضيحية: برغم عدم ذكر Spirulina نصاً في المصدر الذي ذكر Chlorella كمكمل بروتيني، إلا أن السبيرولينا هي الإجابة الأكاديمية الدقيقة المطابقة للخيارات).",
+            terms: "تعريف المصطلحات:\nSpirulina (السبيرولينا): نوع فريد من البكتيريا الزرقاء (السيانوباكتيريا) الخيطية التي أصبحت زراعتها شائعة كمكمل غذائي بشري متكامل.\nEssential amino acids (الأحماض الأمينية الأساسية): أحماض لا يمكن لجسم الإنسان تخليقها داخلياً ويتحتم عليه استمدادها بشكل مباشر من الغذاء."
+        },
+        {
+            qEn: "......... conduct the food to the other parts of algae.",
+            qAr: "......... تنقل الغذاء إلى الأجزاء الأخرى من الطحالب.",
+            options: ["A- Cortex", "B- Meristoderm", "C- Xylem", "D- Medulla"],
+            correctIndex: 3,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (D) حيث يُظهر التكوين التشريحي للطحالب البنية المتقدمة كجنس الفوكاس والسارجاسوم تميزاً نسيجياً داخلياً لطبقة النخاع (Medulla). تتألف هذه الطبقة المركزية من خلايا طولية سميكة الجدران تخصصت للعمل كأنسجة وعائية لنقل وتوصيل الغذاء لمختلف أجزاء الطحلب.",
+            terms: "تعريف المصطلحات:\nMedulla (النخاع): النسيج المركزي في أنصال ومحاور بعض الطحالب الكبيرة والذي تلعب خلاياه الطولية دوراً حيوياً في النقل الميكانيكي والغذائي.\nCortex (القشرة): نسيج متوسط يفصل بين البشرة الخارجية والنخاع ويكون مخصصاً في العادة لعملية تخزين الكربوهيدرات والمدخرات الغذائية."
+        },
+        {
+            qEn: "In the Pteridophytes, the dominant phase is the .........",
+            qAr: "في السراخس (البتيريدوفيتات)، الطور السائد هو .........",
+            options: ["A- Sporophyte", "B- Gametophyte", "C- Carposporophyte", "D- Tetrasporophyte"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة الصحيحة هي (A) حيث تُظهر السراخس (Pteridophytes) أو النباتات الوعائية اللازهرية تبايناً في دورة حياتها بتعاقب الأجيال. في هذه المجموعة، يُعد الطور الجرثومي ثنائي الصيغة الصبغية (Sporophyte) هو الطور المستقل والسائد (Dominant phase)، على النقيض تماماً من الحزازيات التي يسود فيها الطور المشيجي.",
+            terms: "تعريف المصطلحات:\nPteridophytes (السراخس/البتيريدوفيتات): مجموعة من النباتات الوعائية البدائية التي تتكاثر بالجراثيم دون إنتاج أزهار أو بذور ولها أطوار نمو مميزة.\nSporophyte (الطور الجرثومي): المرحلة المورفولوجية ثنائية الصيغة الصبغية (2n) والتي تُكون الأبواغ الانقسامية وتمثل النبات الأساسي الذي نراه في السراخس.\nDominant phase (الطور السائد): مرحلة الحياة الأطول والأكثر تعقيداً واستقلالية في دورة حياة الكائنات التي تخضع لتعاقب الأجيال."
+        }
+    ];
+
+    const container = document.getElementById('quiz-container');
+
+    quizData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        // Question texts
+        const qEn = document.createElement('div');
+        qEn.className = 'question-text';
+        qEn.textContent = `${index + 1}. ${item.qEn}`;
+        
+        const qAr = document.createElement('div');
+        qAr.className = 'question-ar';
+        qAr.textContent = item.qAr;
+
+        // Options
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'options-grid';
+        
+        // Explanation toggle and content
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'explanation-toggle';
+        toggleBtn.textContent = '📖 Show Explanation & Terms (إظهار الشرح والمصطلحات)';
+        
+        const expContent = document.createElement('div');
+        expContent.className = 'explanation-content';
+        
+        const expText = document.createElement('div');
+        expText.className = 'explanation-text';
+        expText.textContent = item.explanation;
+        
+        const termsText = document.createElement('div');
+        termsText.className = 'terms-text';
+        termsText.textContent = item.terms;
+
+        expContent.appendChild(expText);
+        expContent.appendChild(termsText);
+
+        // Logic for answering
+        const buttons = [];
+        item.options.forEach((optText, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = optText;
+            
+            btn.addEventListener('click', () => {
+                // Disable all buttons in this card after clicking
+                buttons.forEach(b => b.disabled = true);
+                
+                if (optIndex === item.correctIndex) {
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('wrong');
+                    // Highlight the correct one
+                    buttons[item.correctIndex].classList.add('correct');
+                }
+                
+                // Show the explanation toggle
+                toggleBtn.style.display = 'block';
+            });
+            
+            buttons.push(btn);
+            optionsGrid.appendChild(btn);
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            expContent.classList.toggle('visible');
+            toggleBtn.textContent = expContent.classList.contains('visible') 
+                ? '📖 Hide Explanation (إخفاء الشرح)' 
+                : '📖 Show Explanation & Terms (إظهار الشرح والمصطلحات)';
+        });
+
+        card.appendChild(qEn);
+        card.appendChild(qAr);
+        card.appendChild(optionsGrid);
+        card.appendChild(toggleBtn);
+        card.appendChild(expContent);
+
+        container.appendChild(card);
+    });
+</script>
+</body>
+</html>
