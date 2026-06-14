@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الأحياء والكيمياء الحيوية</title>
+<style>
+:root {
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #4a4a6a;
+  --color-text-tertiary: #7a7a9a;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f4f6f8;
+  --color-border-secondary: #d1d5db;
+  --color-border-tertiary: #e5e7eb;
+  --border-radius-md: 10px;
+  --border-radius-lg: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: #f8f9fb; min-height: 100vh; }
+.quiz-wrap { padding: 1.5rem 1rem; direction: rtl; max-width: 720px; margin: 0 auto; }
+.header { text-align: center; margin-bottom: 2rem; }
+.header h1 { font-size: 24px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 6px; }
+.header p { font-size: 14px; color: var(--color-text-secondary); }
+.progress-bar-wrap { background: var(--color-background-secondary); border-radius: 999px; height: 8px; margin-bottom: 0.5rem; }
+.progress-bar { background: #1D9E75; height: 8px; border-radius: 999px; transition: width 0.4s ease; }
+.progress-label { font-size: 13px; color: var(--color-text-secondary); text-align: center; margin-bottom: 1.5rem; }
+.question-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.q-number { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 8px; }
+.q-text-en { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; line-height: 1.5; }
+.q-text-ar { font-size: 15px; color: var(--color-text-secondary); margin-bottom: 1.25rem; line-height: 1.6; }
+.btn-row { display: flex; gap: 12px; justify-content: center; }
+.btn-tf { flex: 1; max-width: 140px; padding: 10px 0; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.15s, transform 0.1s; }
+.btn-tf:hover { background: var(--color-background-secondary); }
+.btn-tf.correct { background: #E1F5EE; border-color: #0F6E56; color: #085041; }
+.btn-tf.wrong { background: #FCEBEB; border-color: #A32D2D; color: #791F1F; }
+.btn-tf.disabled { cursor: default; }
+.explanation { margin-top: 1rem; padding: 1rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); border-right: 3px solid #1D9E75; font-size: 14px; color: var(--color-text-primary); line-height: 1.7; display: none; }
+.explanation.show { display: block; }
+.explanation .correct-badge { display: inline-block; background: #E1F5EE; color: #085041; font-size: 12px; padding: 2px 10px; border-radius: 999px; margin-bottom: 8px; font-weight: 500; }
+.explanation .wrong-badge { display: inline-block; background: #FCEBEB; color: #791F1F; font-size: 12px; padding: 2px 10px; border-radius: 999px; margin-bottom: 8px; font-weight: 500; }
+
+/* Definitions section */
+.definitions-section { margin-top: 0.75rem; padding: 0.75rem 1rem; background: #fffbeb; border-radius: var(--border-radius-md); border-right: 3px solid #f59e0b; display: none; }
+.definitions-section.show { display: block; }
+.def-title { font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.def-title::before { content: "📖"; }
+.def-content { font-size: 13px; color: #78350f; line-height: 1.8; }
+.def-content strong { color: #92400e; }
+.def-content br { margin-bottom: 4px; display: block; content: ""; }
+
+.score-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 2rem; text-align: center; display: none; }
+.score-card.show { display: block; }
+.score-big { font-size: 48px; font-weight: 500; color: #1D9E75; }
+.score-label { font-size: 16px; color: var(--color-text-secondary); margin: 8px 0 1.5rem; }
+.score-breakdown { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; }
+.breakdown-item { text-align: center; }
+.breakdown-num { font-size: 24px; font-weight: 500; }
+.breakdown-lbl { font-size: 13px; color: var(--color-text-secondary); }
+.restart-btn { padding: 10px 28px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); font-size: 15px; cursor: pointer; }
+.restart-btn:hover { background: var(--color-background-secondary); }
+.next-btn { display: block; margin: 1rem auto 0; padding: 8px 28px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); font-size: 14px; cursor: pointer; }
+.next-btn:hover { background: var(--color-background-secondary); }
+
+/* Share link banner */
+.share-banner { background: #e0f2fe; border: 1px solid #7dd3fc; border-radius: var(--border-radius-md); padding: 0.75rem 1rem; margin-bottom: 1.5rem; text-align: center; font-size: 13px; color: #0369a1; }
+.share-banner a { color: #0284c7; text-decoration: underline; font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="quiz-wrap">
+  <div class="header">
+    <h1>اختبار الأحياء والكيمياء الحيوية</h1>
+    <p>اختر صح أو خطأ لكل سؤال — مع تعريفات المصطلحات العلمية</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar" id="pbar" style="width:0%"></div></div>
+  <div class="progress-label" id="plabel">السؤال 1 من 25</div>
+  <div id="question-area"></div>
+  <div class="score-card" id="score-card">
+    <div class="score-big" id="score-pct">0%</div>
+    <div class="score-label">نتيجتك النهائية</div>
+    <div class="score-breakdown">
+      <div class="breakdown-item"><div class="breakdown-num" id="s-correct" style="color:#085041">0</div><div class="breakdown-lbl">إجابات صحيحة</div></div>
+      <div class="breakdown-item"><div class="breakdown-num" id="s-wrong" style="color:#791F1F">0</div><div class="breakdown-lbl">إجابات خاطئة</div></div>
+    </div>
+    <button class="restart-btn" onclick="restart()">إعادة الاختبار</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  { en: "Particle size of true solution is bigger than 1000 nm.", ar: "حجم الجسيمات في المحلول الحقيقي أكبر من 1000 نانومتر.", answer: false, explanation: "خطأ — المحاليل الحقيقية تتميز بجزيئات صغيرة جداً يقل قطرها عن 1 نانومتر. الجسيمات التي تتجاوز 1000 نانومتر تشكّل المعلقات (Suspensions).", definitions: "<strong>المحلول الحقيقي (True solution):</strong> خليط متجانس تتوزع فيه جزيئات المذاب بالكامل في المذيب ولا يمكن تمييزها.<br>
+<strong>المعلقات (Suspensions):</strong> خليط غير متجانس يحتوي على جسيمات صلبة كبيرة نسبياً تميل للترسب ولا تذوب." },
+  { en: "Direct sunlight is essential for the Calvin cycle to function.", ar: "ضوء الشمس المباشر ضروري لكي تعمل دورة كالفن.", answer: false, explanation: "خطأ — دورة كالفن تُعرف بالتفاعلات اللاضوئية، ولا تحتاج ضوءاً مباشراً بل تعتمد على ATP و NADPH الناتجة من التفاعلات الضوئية.", definitions: "<strong>دورة كالفن (Calvin cycle):</strong> مسار حيوي كيميائي في البلاستيدات الخضراء لتثبيت الكربون في عملية البناء الضوئي.<br>
+<strong>التفاعلات اللاضوئية (Dark reactions):</strong> المرحلة الثانية من البناء الضوئي التي لا تعتمد على الضوء المباشر كمصدر للطاقة." },
+  { en: "The rate of the diffusion is directly proportional to the pressure.", ar: "معدل الانتشار يتناسب طردياً مع الضغط.", answer: true, explanation: "صحيح — زيادة الضغط ترفع الطاقة الحركية للجسيمات، مما يسرّع انتقالها من منطقة الضغط المرتفع إلى المنخفض.", definitions: "<strong>الانتشار (Diffusion):</strong> الحركة العشوائية المستمرة للجزيئات من منطقة التركيز المرتفع إلى منطقة التركيز المنخفض.<br>
+<strong>الضغط (Pressure):</strong> القوة المبذولة بواسطة حركة واصطدام الجسيمات على وحدة المساحة في محيطها." },
+  { en: "The rate of transpiration is higher when the atmospheric humidity is high.", ar: "معدل النتح يكون أعلى عندما تكون الرطوبة الجوية عالية.", answer: false, explanation: "خطأ — معدل النتح يتناسب عكسياً مع الرطوبة الجوية. عندما ترتفع الرطوبة، يقل تدرج تركيز بخار الماء فيتباطأ التبخر.", definitions: "<strong>النتح (Transpiration):</strong> تبخر الماء من الأسطح النباتية المعرضة للهواء، خاصة ثغور الأوراق.<br>
+<strong>الرطوبة الجوية (Atmospheric humidity):</strong> كمية أو نسبة بخار الماء المتواجدة في الهواء المحيط بالنبات." },
+  { en: "Diffusion is the movement of water across a membrane.", ar: "الانتشار هو حركة الماء عبر الغشاء.", answer: false, explanation: "خطأ — حركة الماء تحديداً عبر غشاء شبه منفذ تُعرف بالأسموزية (Osmosis). الانتشار مصطلح أعم يشمل أي نوع من الجزيئات.", definitions: "<strong>الخاصية الأسموزية (Osmosis):</strong> حركة المذيب السائلة عبر غشاء شبه منفذ نحو منطقة التركيز الأعلى للمادة المذابة.<br>
+<strong>الانتشار (Diffusion):</strong> الحركة العشوائية المستمرة للجزيئات من منطقة التركيز المرتفع إلى منطقة التركيز المنخفض." },
+  { en: "Osmotic pressure of colloidal solutions is very low.", ar: "الضغط الأسموزي للمحاليل الغروية منخفض جداً.", answer: true, explanation: "صحيح — في المحاليل الغروية تتجمع الجزيئات لتكوين جسيمات كبيرة مما يقلل عددها الإجمالي، وبالتالي يكون الضغط الأسموزي منخفضاً.", definitions: "<strong>الضغط الأسموزي (Osmotic pressure):</strong> الضغط الناشئ عن وجود مذابات والذي يحفز انتقال المذيب (الماء) إليه.<br>
+<strong>المحاليل الغروية (Colloidal solutions):</strong> مخاليط تتراوح أحجام جسيماتها بين المحاليل الحقيقية والمعلقات، ولا تمر عبر الأغشية." },
+  { en: "Km indicates the affinity of the enzyme for its substrate.", ar: "قيمة Km تشير إلى ألفة الإنزيم للركيزة الخاصة به.", answer: true, explanation: "صحيح — ثابت ميكايليس (Km) يعبر عن تركيز الركيزة اللازم لنصف السرعة القصوى. القيمة المنخفضة تعني ألفة عالية بين الإنزيم والركيزة.", definitions: "<strong>ثابت ميكايليس Km:</strong> مقياس يعبر عن تركيز الركيزة المطلوب لتحقيق 50% من السرعة القصوى للتفاعل الإنزيمي.<br>
+<strong>الركيزة (Substrate):</strong> المادة الكيميائية المتفاعلة التي يرتبط بها الإنزيم في موقعه النشط لتحفيز التفاعل." },
+  { en: "Rate of diffusion is directly proportional to square root of its relative density.", ar: "معدل الانتشار يتناسب طردياً مع الجذر التربيعي لكثافته النسبية.", answer: false, explanation: "خطأ — وفق قانون جراهام، معدل الانتشار يتناسب عكسياً (وليس طردياً) مع الجذر التربيعي للكثافة. الغازات الأخف تنتشر أسرع.", definitions: "<strong>قانون جراهام (Graham's law):</strong> قانون فيزيائي ينص على أن سرعة انتشار الغاز تتناسب عكسياً مع الجذر التربيعي لكثافته.<br>
+<strong>الكثافة النسبية (Relative density):</strong> نسبة كثافة الغاز أو المادة إلى كثافة مادة مرجعية قياسية في ظروف محددة." },
+  { en: "Osmosis is the spread of particles through random motion.", ar: "الخاصية الأسموزية هي انتشار الجسيمات من خلال الحركة العشوائية.", answer: false, explanation: "خطأ — الحركة العشوائية تصف الانتشار (Diffusion). الأسموزية هي انتقال موجّه لجزيئات الماء عبر غشاء شبه منفذ نحو التركيز الأعلى.", definitions: "<strong>الخاصية الأسموزية (Osmosis):</strong> حركة المذيب السائلة عبر غشاء شبه منفذ نحو منطقة التركيز الأعلى للمادة المذابة.<br>
+<strong>الحركة العشوائية (Random motion):</strong> الحركة الحرارية غير الموجهة للجسيمات والتي تسبب ظاهرة الانتشار الطبيعي." },
+  { en: "Minute quantity of an enzyme converts huge number of moles from reactants to products.", ar: "كمية دقيقة من الإنزيم تحول عدداً هائلاً من المولات من المتفاعلات إلى نواتج.", answer: true, explanation: "صحيح — الإنزيمات محفزات حيوية لا تُستهلك، فجزيء واحد منها يمكنه تحفيز آلاف التفاعلات مراراً وتكراراً.", definitions: "<strong>الإنزيم (Enzyme):</strong> جزيء بروتيني يعمل كمحفز حيوي لتسريع وتنظيم التفاعلات الكيميائية داخل الخلايا دون أن يُستهلك.<br>
+<strong>المتفاعلات والنواتج (Reactants and Products):</strong> المواد التي تدخل في التفاعل الكيميائي وتلك التي تنتج عنه، على التوالي." },
+  { en: "Number of ATP consumed for each Calvin cycle is 3.", ar: "عدد جزيئات ATP المستهلكة في كل دورة كالفن هو 3.", answer: true, explanation: "صحيح — في كل دورة كالفن لتثبيت جزيء CO₂ واحد يُستهلك 3 جزيئات ATP و2 جزيء NADPH.", definitions: "<strong>دورة كالفن (Calvin cycle):</strong> مسار حيوي كيميائي في البلاستيدات الخضراء لتثبيت الكربون في عملية البناء الضوئي.<br>
+<strong>ATP:</strong> جزيء الأدينوزين ثلاثي الفوسفات، وهو عملة حفظ ونقل الطاقة الرئيسية في الخلايا." },
+  { en: "Enzymes are used up after catalysing the conversion of reactants to product.", ar: "تُستهلك الإنزيمات بعد تحفيز تحويل المتفاعلات إلى نواتج.", answer: false, explanation: "خطأ — الإنزيمات لا تتغير كيميائياً ولا تُستهلك أثناء التفاعل، بل تعود لحالتها الأصلية لتكرار العمل.", definitions: "<strong>الإنزيمات (Enzymes):</strong> بروتينات تعمل كمحفزات حيوية لتسريع التفاعلات دون التأثر بها.<br>
+<strong>عوامل حفازة (Catalysts):</strong> مواد تسرع التفاعل الكيميائي وتقليل طاقة التنشيط دون أن تستهلك فيه." },
+  { en: "Rate of absorption is inversely proportional to the concentration of soil minerals.", ar: "معدل الامتصاص يتناسب عكسياً مع تركيز معادن التربة.", answer: true, explanation: "صحيح — ارتفاع تركيز المعادن يرفع الضغط الأسموزي للتربة، مما يقلل تدرج الجهد المائي ويُبطئ امتصاص الجذور للماء.", definitions: "<strong>معدل الامتصاص (Rate of absorption):</strong> سرعة أو كمية دخول الماء أو العناصر الغذائية لداخل أنسجة النبات.<br>
+<strong>الجهد المائي (Water potential):</strong> مقياس للطاقة الكامنة للماء يحدد اتجاه حركته من المنطقة الأعلى جهداً إلى الأقل جهداً." },
+  { en: "Vmax is directly proportional to the concentration of enzyme.", ar: "السرعة القصوى Vmax تتناسب طردياً مع تركيز الإنزيم.", answer: true, explanation: "صحيح — زيادة تركيز الإنزيم تعني مزيداً من المواقع النشطة المتاحة، فترتفع السرعة القصوى طردياً.", definitions: "<strong>السرعة القصوى (Vmax):</strong> أعلى سرعة يصل إليها التفاعل الإنزيمي عند تشبع كامل الإنزيمات بالركيزة.<br>
+<strong>تركيز الإنزيم (Enzyme concentration):</strong> كمية جزيئات الإنزيم المتوفرة للعمل في وسط التفاعل." },
+  { en: "Number of NADPH consumed for each Calvin cycle is 3.", ar: "عدد جزيئات NADPH المستهلكة في كل دورة كالفن هو 3.", answer: false, explanation: "خطأ — يُستهلك جزيئان فقط من NADPH لكل دورة كالفن (وليس 3)، بينما ATP هو الذي يُستهلك منه 3 جزيئات.", definitions: "<strong>NADPH:</strong> ناقل للإلكترونات يعمل كعامل مختزل أساسي في التفاعلات البنائية كدورة كالفن.<br>
+<strong>عامل مختزل (Reducing agent):</strong> مادة تمنح إلكترونات أو هيدروجين لمادة أخرى خلال تفاعل الأكسدة والاختزال." },
+  { en: "Glycolysis occurs in all living organisms.", ar: "التحلل السكري يحدث في جميع الكائنات الحية.", answer: true, explanation: "صحيح — التحلل السكري مسار أيضي أساسي ومحفوظ تطورياً، يحدث في سيتوبلازم خلايا جميع الكائنات الحية.", definitions: "<strong>التحلل السكري (Glycolysis):</strong> سلسلة تفاعلات تحول الجلوكوز إلى حمض البيروفيك مع إنتاج كمية من الـ ATP.<br>
+<strong>سيتوبلازم (Cytoplasm):</strong> السائل الهلامي داخل الخلية والذي تحدث فيه العديد من العمليات الأيضية الأساسية." },
+  { en: "Root pressure is found less in summer and more in winter.", ar: "الضغط الجذري يكون أقل في الصيف وأكثر في الشتاء.", answer: false, explanation: "خطأ — الضغط الجذري يكون في أعلى مستوياته في الربيع (وليس الشتاء) قبل تفتح الأوراق الكامل، ويقل في الصيف بسبب ارتفاع النتح.", definitions: "<strong>الضغط الجذري (Root pressure):</strong> ضغط إيجابي يتولد في جذور النبات لدفع عصارة الخشب للأعلى.<br>
+<strong>النتح (Transpiration):</strong> عملية فقدان النبات للماء على شكل بخار، مما يولد قوة شد تسحب الماء لأعلى النبات." },
+  { en: "Plasmolysis is the process of a plant cell swelling due to water entering it.", ar: "البلزمة هي عملية انتفاخ الخلية النباتية بسبب دخول الماء إليها.", answer: false, explanation: "خطأ — البلزمة هي انكماش الغشاء البلازمي وابتعاده عن الجدار الخلوي بسبب خروج الماء أسموزياً في محلول مفرط التركيز.", definitions: "<strong>البلزمة (Plasmolysis):</strong> انكماش بروتوبلازم الخلية النباتية وابتعاده عن الجدار نتيجة فقدان الماء.<br>
+<strong>محلول عالي التركيز (Hypertonic solution):</strong> محلول يحتوي على نسبة مذابات أعلى من تلك الموجودة داخل الخلية." },
+  { en: "Enzymes increase the rate of reactions by increasing the activation energy.", ar: "تزيد الإنزيمات من معدل التفاعلات عن طريق زيادة طاقة التنشيط.", answer: false, explanation: "خطأ — الإنزيمات تسرّع التفاعلات بتقليل طاقة التنشيط (وليس زيادتها)، مما يتيح للتفاعل أن يحدث بطاقة أقل.", definitions: "<strong>طاقة التنشيط (Activation energy):</strong> الحد الأدنى من الطاقة المطلوبة لبدء وكسر روابط تفاعل كيميائي.<br>
+<strong>الإنزيمات (Enzymes):</strong> محفزات حيوية بروتينية تخفض حاجز الطاقة للتفاعلات." },
+  { en: "Transpiration is a necessary evil.", ar: "النتح هو شر لابد منه.", answer: true, explanation: "صحيح — النتح يسبب فقدان الماء (الشر)، لكنه ضروري لتوليد قوة الشد لرفع العصارة وتبريد الأوراق وتنظيم درجة الحرارة.", definitions: "<strong>النتح (Transpiration):</strong> تبخر الماء من الأسطح النباتية المعرضة للهواء، خاصة ثغور الأوراق.<br>
+<strong>قوة الشد (Tension):</strong> القوة الساحبة المتولدة عن تبخر الماء والتي ترفع عصارة الخشب من الجذور للأوراق." },
+  { en: "Dehydrogenases can transfer hydrogen from an oxidized substance to another a reduced one.", ar: "يمكن لإنزيمات نازعة الهيدروجين نقل الهيدروجين من مادة مؤكسدة إلى أخرى مختزلة.", answer: false, explanation: "خطأ — إنزيمات نازعة الهيدروجين تنزع الهيدروجين من مادة مؤكسَدة (تتأكسد) وتنقله إلى مادة مؤكسِدة لتختزلها، وليس العكس.", definitions: "<strong>إنزيمات نازعة الهيدروجين (Dehydrogenases):</strong> إنزيمات تحفز تفاعلات الأكسدة والاختزال بنقل أيونات الهيدروجين والإلكترونات.<br>
+<strong>الاختزال (Reduction):</strong> اكتساب المادة الكيميائية للإلكترونات أو ذرات الهيدروجين أثناء التفاعل." },
+  { en: "The hydathode consists of a water pore which remains permanently open.", ar: "تتكون الثغور المائية من ثقب مائي يظل مفتوحاً بشكل دائم.", answer: true, explanation: "صحيح — الثغور المائية (Hydathodes) تبقى مفتوحة دائماً لعدم احتوائها على خلايا حارسة، وهي المسؤولة عن ظاهرة الإدماع.", definitions: "<strong>الثغور المائية (Hydathodes):</strong> تراكيب متخصصة في أطراف الأوراق تفرز قطرات الماء الزائد.<br>
+<strong>الإدماع (Guttation):</strong> خروج الماء على شكل قطرات سائلة من أطراف أوراق النباتات غالباً في الصباح الباكر." },
+  { en: "Accumulation of end products may act as inhibitors for enzymes.", ar: "تراكم النواتج النهائية قد يعمل كمثبطات للإنزيمات.", answer: true, explanation: "صحيح — هذا هو التثبيط الراجع (Feedback inhibition)، حيث يثبط الناتج النهائي الإنزيم الأول في المسار عند تراكمه.", definitions: "<strong>التثبيط الراجع (Feedback inhibition):</strong> آلية تنظيمية يثبط فيها ناتج المسار الإنزيمات المشاركة في إنتاجه.<br>
+<strong>مثبطات الإنزيم (Enzyme inhibitors):</strong> جزيئات تقلل أو توقف نشاط الإنزيم كلياً أو جزئياً عند الارتباط به." },
+  { en: "The osmotic pressure of halophytes is low.", ar: "الضغط الأسموزي للنباتات الملحية منخفض.", answer: false, explanation: "خطأ — النباتات الملحية تحتاج ضغطاً أسموزياً عالياً جداً في فجواتها الخلوية يتجاوز ضغط التربة الملحية حتى تتمكن من امتصاص الماء.", definitions: "<strong>النباتات الملحية (Halophytes):</strong> نباتات تكيفت للنمو في بيئات التربة أو المياه ذات الملوحة المرتفعة.<br>
+<strong>الضغط الأسموزي (Osmotic pressure):</strong> الضغط الناشئ عن وجود مذابات والذي يحفز انتقال المذيب (الماء) إليه." },
+  { en: "NAD is a hydrogen carrier.", ar: "جزيء NAD هو ناقل للهيدروجين.", answer: true, explanation: "صحيح — NAD⁺ يعمل كناقل للإلكترونات والهيدروجين في التفاعلات الأيضية، إذ يكتسبهما ليتحول إلى NADH.", definitions: "<strong>NAD:</strong> مرافق إنزيمي حيوي يتواجد في الخلايا ويعمل في التفاعلات الأيضية لنقل الإلكترونات.<br>
+<strong>ناقل هيدروجين (Hydrogen carrier):</strong> جزيء يرتبط بأيونات الهيدروجين والإلكترونات مؤقتاً لنقلها لمركبات أو مسارات أخرى." }
+];
+
+let current = 0, score = 0, answered = 0;
+
+function render() {
+  const area = document.getElementById('question-area');
+  if (current >= questions.length) {
+    area.style.display = 'none';
+    document.getElementById('score-card').classList.add('show');
+    const pct = Math.round((score / questions.length) * 100);
+    document.getElementById('score-pct').textContent = pct + '%';
+    document.getElementById('s-correct').textContent = score;
+    document.getElementById('s-wrong').textContent = questions.length - score;
+    document.getElementById('plabel').textContent = 'اكتمل الاختبار!';
+    document.getElementById('pbar').style.width = '100%';
+    return;
+  }
+  const q = questions[current];
+  document.getElementById('plabel').textContent = 'السؤال ' + (current + 1) + ' من ' + questions.length;
+  document.getElementById('pbar').style.width = ((current / questions.length) * 100) + '%';
+  area.innerHTML = '<div class="question-card">' +
+    '<div class="q-number">السؤال ' + (current + 1) + '</div>' +
+    '<div class="q-text-en">' + q.en + '</div>' +
+    '<div class="q-text-ar">' + q.ar + '</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn-tf" id="btn-true" onclick="answer(true)">✓ صحيح</button>' +
+    '<button class="btn-tf" id="btn-false" onclick="answer(false)">✗ خطأ</button>' +
+    '</div>' +
+    '<div class="explanation" id="expl"></div>' +
+    '<div class="definitions-section" id="defs"></div>' +
+    '<button class="next-btn" id="next-btn" style="display:none" onclick="nextQ()">' + (current + 1 < questions.length ? 'السؤال التالي ←' : 'عرض النتيجة ←') + '</button>' +
+    '</div>';
+}
+
+function answer(val) {
+  const q = questions[current];
+  const btnT = document.getElementById('btn-true');
+  const btnF = document.getElementById('btn-false');
+  btnT.classList.add('disabled'); btnF.classList.add('disabled');
+  btnT.onclick = null; btnF.onclick = null;
+  const isCorrect = val === q.answer;
+  if (isCorrect) score++;
+  if (val === true) { btnT.classList.add(isCorrect ? 'correct' : 'wrong'); }
+  else { btnF.classList.add(isCorrect ? 'correct' : 'wrong'); }
+  if (q.answer === true) btnT.classList.add('correct');
+  else btnF.classList.add('correct');
+  const expl = document.getElementById('expl');
+  expl.innerHTML = '<span class="' + (isCorrect ? 'correct-badge' : 'wrong-badge') + '">' + (isCorrect ? '✓ إجابة صحيحة' : '✗ إجابة خاطئة') + '</span><br>' + q.explanation;
+  expl.classList.add('show');
+
+  // Show definitions
+  const defs = document.getElementById('defs');
+  defs.innerHTML = '<div class="def-title">تعريفات المصطلحات العلمية</div><div class="def-content">' + q.definitions + '</div>';
+  defs.classList.add('show');
+
+  document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextQ() { current++; render(); }
+
+function restart() {
+  current = 0; score = 0;
+  document.getElementById('score-card').classList.remove('show');
+  document.getElementById('question-area').style.display = 'block';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
