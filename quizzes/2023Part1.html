@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biochemistry & Plant Physiology Quiz</title>
+    <style>
+        :root {
+            --primary: #2ea44f;
+            --primary-hover: #2c974b;
+            --bg-color: #f6f8fa;
+            --card-bg: #ffffff;
+            --text-main: #24292e;
+            --text-muted: #586069;
+            --border: #e1e4e8;
+            --correct-bg: #d4edda;
+            --correct-border: #c3e6cb;
+            --correct-text: #155724;
+            --wrong-bg: #f8d7da;
+            --wrong-border: #f5c6cb;
+            --wrong-text: #721c24;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-ar {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            direction: rtl;
+            text-align: right;
+            border-right: 3px solid var(--border);
+            padding-right: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-btn {
+            background-color: #fcfcfc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f0f3f6;
+            border-color: #d1d5da;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+            font-weight: 600;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: var(--wrong-text);
+        }
+
+        .explanation-toggle {
+            background: none;
+            border: none;
+            color: #0366d6;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0;
+            font-weight: 600;
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .explanation-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .explanation-content {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            direction: rtl;
+            text-align: right;
+        }
+
+        .explanation-content.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-text {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .terms-text {
+            white-space: pre-line;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Biochemistry & Plant Physiology Review</h1>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            qEn: "Hypertonic solution has osmotic pressure less than that of cell sap",
+            qAr: "المحلول مفرط التوتر له ضغط أسموزي أقل من ضغط العصير الخلوي.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن المحلول مفرط التوتر (Hypertonic solution) يتميز بتركيز وضغط أسموزي (Osmotic pressure) أعلى من العصير الخلوي (Cell sap)، مما يؤدي إلى خروج الماء من الخلية بعملية الخاصية الأسموزية الخارجية (Exosmosis) وانكماشها.",
+            terms: "تعريف المصطلحات:\nHypertonic solution (محلول مفرط التوتر): محلول يمتلك تركيزاً عالياً من المواد المذابة مقارنة بمحلول آخر (مثل العصير الخلوي).\nOsmotic pressure (الضغط الأسموزي): الضغط الناشئ عن وجود مواد مذابة في المحلول، والذي يدفع الماء للانتقال عبر غشاء شبه منفذ.\nExosmosis (الخاصية الأسموزية الخارجية): حركة خروج جزيئات الماء من داخل الخلية إلى الوسط المحيط بها ذي التركيز الأعلى."
+        },
+        {
+            qEn: "Colloidal solutions are characterized by high osmotic pressure",
+            qAr: "تتميز المحاليل الغروية بضغط أسموزي عالٍ.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن المحاليل الغروية (Colloidal solutions) تتميز بضغط أسموزي منخفض جداً (Low osmotic pressure)، حيث أن جزيئات الطور المشتت لها تأثير طفيف جداً على درجتي الغليان والتجمد لوسط الانتشار.",
+            terms: "تعريف المصطلحات:\nColloidal solutions (المحاليل الغروية): أنظمة غير متجانسة تحتوي على جزيئات يتراوح حجمها بين المحاليل الحقيقية والمعلقات وتنتشر في وسط سائل.\nLow osmotic pressure (ضغط أسموزي منخفض): ضغط ضعيف لا يسبب تدفقاً مائياً قوياً عبر الأغشية، ويميز الجزيئات الغروية كبيرة الحجم نسبياً."
+        },
+        {
+            qEn: "Permeable membrane allows passage of solvent molecules not solute",
+            qAr: "الغشاء المنفذ يسمح بمرور جزيئات المذيب وليس المذاب.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن الغشاء المنفذ (Permeable membrane) مثل الجدار الخلوي يسمح بمرور كل من جزيئات المذيب (Solvent) والمذاب (Solutes). بينما الغشاء شبه المنفذ (Semipermeable membrane) هو الذي يسمح بمرور المذيب فقط.",
+            terms: "تعريف المصطلحات:\nPermeable membrane (غشاء منفذ): غشاء مسامي (مثل الجدار الخلوي السليلوزي) يسمح بعبور جميع الجزيئات بغض النظر عن حجمها.\nSemipermeable membrane (غشاء شبه منفذ): غشاء حيوي (مثل الغشاء البلازمي) يسمح بمرور المذيبات كالماء ويمنع مرور العديد من المذابات.\nSolvent and Solute (المذيب والمذاب): المذيب هو السائل الذي يذيب المواد (كالماء)، والمذاب هو المادة التي تتفكك وتذوب فيه."
+        },
+        {
+            qEn: "Vital force theory is accepted to explain ascent of sap process",
+            qAr: "نظرية القوة الحيوية مقبولة لتفسير عملية صعود العصارة.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) حيث تم رفض وتجاهل نظرية القوة الحيوية (Vital force theory) علمياً؛ لأن صعود العصارة (Ascent of sap) يستمر بفعالية حتى عند قتل الخلايا الحية في الساق باستخدام السموم، مما يثبت عدم ضرورتها للعملية.",
+            terms: "تعريف المصطلحات:\nVital force theory (نظرية القوة الحيوية): نظرية تاريخية افترضت أن الخلايا الحية في النبات (كخلايا الأشعة النخاعية) تدفع العصارة لأعلى كنظام ضخ.\nAscent of sap (صعود العصارة): العملية الفيزيائية لانتقال الماء والأملاح المذابة من الجذور صعوداً عبر نسيج الخشب إلى الأوراق في النبات."
+        },
+        {
+            qEn: "Rate of diffusion is inversely proportional to size of molecules",
+            qAr: "معدل الانتشار يتناسب عكسياً مع حجم الجزيئات.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) لأن معدل الانتشار (Rate of diffusion) يتناسب عكسياً بالفعل مع حجم وكتلة الجزيئات (Size of molecules) المنتشرة، حيث يتباطأ ويقل معدل الانتشار كلما ازداد حجم تلك الجزيئات أو الأيونات في الوسط.",
+            terms: "تعريف المصطلحات:\nRate of diffusion (معدل الانتشار): السرعة التي تنتقل بها جزيئات المادة من منطقة التركيز المرتفع إلى التركيز المنخفض.\nInversely proportional (تناسب عكسي): علاقة رياضية وفيزيائية تعني أن زيادة أحد المتغيرين تؤدي بالضرورة إلى نقصان المتغير الآخر."
+        },
+        {
+            qEn: "Aldolase enzyme is an example of hydrolases.",
+            qAr: "إنزيم الألدوليز هو مثال على إنزيمات التحلل المائي.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن إنزيم الألدوليز (Aldolase) يُعد مثالاً على إنزيمات التحلل غير المائي (Lyases) التي تفكك الروابط الكيميائية (C-C) بطرق أخرى غير التحلل المائي، ولا ينتمي لفئة إنزيمات التحلل المائي (Hydrolases).",
+            terms: "تعريف المصطلحات:\nAldolase (الألدوليز): إنزيم مهم في التحلل السكري يفصل سكر الفركتوز ثنائي الفوسفات إلى جزيئين ثلاثيي الكربون.\nLyases (إنزيمات التحلل غير المائي/الليزازات): مجموعة إنزيمات تحفز كسر الروابط الكيميائية المعقدة بطرق لا تتضمن إضافة الماء أو الأكسدة.\nHydrolases (إنزيمات التحلل المائي): إنزيمات تفكك الروابط الكيميائية في الجزيئات الكبيرة عن طريق إضافة جزيء ماء."
+        },
+        {
+            qEn: "Brownian movement is more pronounced in lyophobic colloids.",
+            qAr: "الحركة البراونية تكون أكثر وضوحاً في الغرويات الكارهة للسائل.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث أن الحركة البراونية (Brownian movement) تظهر بوضوح وبشكل أجلى في جزيئات (Micelles) المحاليل الغروية الكارهة للسائل (Lyophobic colloids) مقارنة بالغرويات المحبة للسائل التي تكون لزوجتها عالية.",
+            terms: "تعريف المصطلحات:\nBrownian movement (الحركة البراونية): الحركة العشوائية المتعرجة المستمرة للجسيمات الغروية الناتجة عن تصادمها غير المتكافئ مع جزيئات وسط الانتشار.\nLyophobic colloids (الغرويات الكارهة للسائل): محاليل غروية تكون فيها قوى التجاذب بين الطور المشتت ووسط الانتشار (السائل) ضعيفة جداً وتتطلب طرقاً خاصة لتحضيرها."
+        },
+        {
+            qEn: "Suction force (SF) in pure solvent depends on both wall pressure and turgor pressure.",
+            qAr: "قوة الامتصاص في المذيب النقي تعتمد على كل من ضغط الجدار وضغط الامتلاء.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن قوة الامتصاص (Suction force) في الخلايا النباتية هي التي تعتمد على الضغط الأسموزي (OP) وضغط الامتلاء (TP). بينما المذيب النقي (Pure solvent) كالماء ليس له ضغط جداري أو ضغط امتلاء وضغطه الأسموزي يساوي صفراً.",
+            terms: "تعريف المصطلحات:\nSuction force (قوة الامتصاص/نقص ضغط الانتشار): القوة أو العجز الذي يحدد قدرة الخلية النباتية على امتصاص وسحب الماء من محيطها.\nPure solvent (المذيب النقي): السائل الخالي تماماً من أي مواد مذابة، ويتميز بأن ضغطه الأسموزي يعادل صفراً.\nTurgor pressure (ضغط الامتلاء): الضغط الهيدروستاتيكي الذي يسلطه البروتوبلازم الممتلئ بالماء على الجدار الخلوي من الداخل."
+        },
+        {
+            qEn: "Rate of photosynthesis is directly proportional to accumulation of end products.",
+            qAr: "معدل البناء الضوئي يتناسب طردياً مع تراكم النواتج النهائية.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن معدل البناء الضوئي يتناسب عكسياً (Inversely) ويثبط نتيجة تراكم النواتج النهائية مثل الكربوهيدرات (Carbohydrates). فتراكم السكر وتخزينه كنشا يقلل المساحة الفعالة في البلاستيدات ويبطئ العملية.",
+            terms: "تعريف المصطلحات:\nRate of photosynthesis (معدل البناء الضوئي): سرعة وكفاءة تحويل النبات لثاني أكسيد الكربون والماء إلى سكريات باستخدام طاقة الضوء.\nAccumulation of end products (تراكم النواتج النهائية): تجمع المواد العضوية الناتجة عن البناء الضوئي (كالسكر والنشا) داخل الخلية وعدم انتقالها، مما يثبط التفاعلات."
+        },
+        {
+            qEn: "Glycolysis process that occurs in cytoplasm aims to produce energy aerobically.",
+            qAr: "عملية التحلل السكري التي تحدث في السيتوبلازم تهدف إلى إنتاج الطاقة هوائياً.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن مرحلة التحلل السكري (Glycolysis) تحدث في السيتوبلازم بشكل لاهوائي (Anaerobically) تماماً ودون الحاجة للأكسجين، وتمثل المرحلة الأولى المشتركة في كل من التنفس الهوائي واللاهوائي.",
+            terms: "تعريف المصطلحات:\nGlycolysis (التحلل السكري): سلسلة تفاعلات كيميائية في السيتوبلازم تكسر جزيء الجلوكوز إلى جزيئين من حمض البيروفيك لإنتاج طاقة جزئية.\nAerobically (هوائياً): صفة للعمليات الأيضية التي يتطلب إتمامها التواجد المباشر لغاز الأكسجين كمستقبل نهائي للإلكترونات."
+        },
+        {
+            qEn: "Imbibition process occurs in both living and nonliving cells.",
+            qAr: "تحدث عملية التشرب في كل من الخلايا الحية وغير الحية.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) لأن عملية التشرب (Imbibition) في النباتات تحدث فعلياً في كل من الخلايا الحية والميتة (Living and dead cells) لاعتمادها الفيزيائي البحت على وجود غرويات محبة للماء (Hydrophilic colloids) تمتص الماء وتنتفخ.",
+            terms: "تعريف المصطلحات:\nImbibition (التشرب): عملية فيزيائية تقوم فيها المواد الغروية الصلبة (كالجدار الخلوي والبذور) بامتصاص السوائل والانتفاخ وزيادة حجمها.\nHydrophilic colloids (الغرويات المحبة للماء): مواد كيميائية (كالسليلوز والبروتينات) تمتلك جاذبية وشراهة عالية للالتصاق بجزيئات الماء وامتصاصها."
+        },
+        {
+            qEn: "Tertiary structure of protein part of enzyme formed by hydrogen bond.",
+            qAr: "التركيب الثلاثي للجزء البروتيني من الإنزيم يتكون بواسطة الرابطة الهيدروجينية.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن التركيب الثلاثي (Tertiary structure) المعقد للإنزيم يتكون ويستقر أساساً بواسطة روابط ثنائي الكبريتيد (Disulfide bonds)، بينما الروابط الهيدروجينية (H-bonds) هي المسؤولة عن تكوين التركيب الثانوي.",
+            terms: "تعريف المصطلحات:\nTertiary structure (التركيب الثلاثي): الانطواء ثلاثي الأبعاد لسلسلة البولي ببتيد في البروتين والذي يمنح الإنزيم شكله الفراغي ونشاطه التحفيزي.\nDisulfide bonds (روابط ثنائي الكبريتيد): روابط تساهمية قوية تنشأ بين مجاميع الكبريت في الأحماض الأمينية (كالسيستين) لتثبيت التركيب الثلاثي للبروتين.\nHydrogen bond (الرابطة الهيدروجينية): رابطة كيميائية ضعيفة نسبياً تساهم في تثبيت التركيب الثانوي لسلاسل البروتين (كحلزون ألفا)."
+        },
+        {
+            qEn: "Monovalent cations increase permeability of plasma membrane.",
+            qAr: "تزيد الكاتيونات أحادية التكافؤ من نفاذية الغشاء البلازمي.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث أثبتت الدراسات أن الكاتيونات أحادية التكافؤ (Monovalent cations) كأيونات الصوديوم والليثيوم والبوتاسيوم تعمل على زيادة نفاذية (Permeability) الخلايا النباتية عبر إضعاف قوى التماسك بين جزيئات الغشاء البلازمي.",
+            terms: "تعريف المصطلحات:\nMonovalent cations (الكاتيونات أحادية التكافؤ): أيونات معدنية موجبة الشحنة تحمل إلكتروناً مفقوداً واحداً (مثل Na+، K+) وتلعب دوراً في تنظيم النفاذية.\nPermeability (النفاذية): الخاصية الحيوية للغشاء الخلوي التي تسمح وتتحكم في معدل عبور الجزيئات والأيونات من وإلى داخل الخلية."
+        },
+        {
+            qEn: "Glutamine synthetase is an example of Isomerases",
+            qAr: "إنزيم جلوتامين سينثيتيز هو مثال على إنزيمات التشكل (الأيزوميريزات).",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن إنزيم جلوتامين سينثيتيز (Glutamine synthetase) يُصنف علمياً كمثال على إنزيمات الربط أو البناء (Ligases أو Synthetases) التي تحفز ربط جزيئين معاً باستهلاك طاقة (ATP)، وليس من إنزيمات التشكل (Isomerases).",
+            terms: "تعريف المصطلحات:\nLigases/Synthetases (إنزيمات الربط/البناء): فئة من الإنزيمات تحفز تكوين روابط كيميائية جديدة لربط جزيئين معاً، وتقترن هذه العملية غالباً باستهلاك الطاقة.\nIsomerases (إنزيمات التشكل/المتشاكلات): إنزيمات تحفز إعادة الترتيب الهيكلي للذرات داخل نفس الجزيء لتحويله من شكل كيميائي إلى آخر.\nGlutamine synthetase (جلوتامين سينثيتيز): إنزيم رابط يحفز دمج حمض الجلوتاميك مع الأمونيا لإنتاج الجلوتامين باستخدام طاقة ATP."
+        },
+        {
+            qEn: "Tyndall phenomenon is less pronounced in lyophobic colloids.",
+            qAr: "ظاهرة تيندال تكون أقل وضوحاً في الغرويات الكارهة للسائل.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن ظاهرة تيندال (Tyndall phenomenon) تكون فعلياً أكثر وضوحاً في المحاليل الغروية الكارهة للسائل (Lyophobic) نظراً للفرق الكبير في معامل الانكسار بين الطورين، بينما تكون أقل وضوحاً في الغرويات المحبة للسائل.",
+            terms: "تعريف المصطلحات:\nTyndall phenomenon (ظاهرة تيندال): ظاهرة تشتت وانكسار حزمة الضوء عند مرورها عبر محلول غروي مما يجعل مسار الضوء مرئياً كمخروط مضيء.\nRefractive index (معامل الانكسار): قيمة فيزيائية تعبر عن مدى تباطؤ أو انكسار الضوء عند انتقاله بين الأوساط المختلفة كالطور المشتت ووسط الانتشار."
+        },
+        {
+            qEn: "Osmotic pressure is directly proportional with both Imbibition and Diffusion.",
+            qAr: "الضغط الأسموزي يتناسب طردياً مع كل من التشرب والانتشار.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن الضغط الأسموزي (Osmotic pressure) يتناسب طردياً مع تركيز المواد المذابة (Concentration of solutes) ودرجة الحرارة، ولا يتناسب بشكل مباشر كقاعدة طردية مع عمليتي التشرب (Imbibition) أو الانتشار البسيط كخصائص مستقلة.",
+            terms: "تعريف المصطلحات:\nConcentration of solutes (تركيز المذابات): كمية المواد الصلبة المتأينة أو الجزيئية المذابة في حجم معين من السائل، وتحدد قيمة الضغط الأسموزي.\nOsmotic pressure (الضغط الأسموزي): الضغط المطلوب لمنع مرور المذيب النقي عبر غشاء شبه منفذ نحو المحلول الأكثر تركيزاً."
+        },
+        {
+            qEn: "Dissociated substances are independent of laws of diffusion.",
+            qAr: "المواد المتأينة (المتفككة) تكون مستقلة عن قوانين الانتشار.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) لأن المواد المتأينة (Dissociated substances) كالإلكتروليتات غير العضوية تدخل إلى الخلايا وتتراكم على شكل أيونات متفرقة، وتكون آليات امتصاصها وتراكمها مستقلة تماماً عن قوانين الانتشار البسيط (Laws of diffusion).",
+            terms: "تعريف المصطلحات:\nDissociated substances (المواد المتأينة/المتفككة): الأملاح والمواد الكيميائية غير العضوية التي تنفصل في الماء إلى أيونات موجبة وسالبة حرة الحركة.\nLaws of diffusion (قوانين الانتشار): القواعد الفيزيائية التي تصف انتقال الجزيئات غير المشحونة من التركيز المرتفع إلى المنخفض للوصول إلى التوازن."
+        },
+        {
+            qEn: "Solarization is photo-oxidation of photosynthetic pigments at low light intensity.",
+            qAr: "التشميس هو الأكسدة الضوئية لصبغات البناء الضوئي عند شدة الإضاءة المنخفضة.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) لأن ظاهرة التشميس (Solarization) أو الأكسدة الضوئية للصبغات وتدمير جهاز البناء الضوئي تحدث حصرياً عند التعرض لشدة إضاءة عالية جداً (Very high light intensity) تتجاوز قدرة النبات، وليس عند الإضاءة المنخفضة.",
+            terms: "تعريف المصطلحات:\nSolarization (التشميس): تدمير كيميائي لصبغات البلاستيدات الخضراء وتثبيط إنزيماتها نتيجة التعرض المفرط لأشعة شمس ذات طاقة عالية جداً.\nPhoto-oxidation (الأكسدة الضوئية): تفاعل كيميائي مدمر يتم فيه أكسدة الجزيئات الحيوية (كالكلوروفيل) باستخدام الأكسجين تحت تأثير الطاقة الضوئية الشديدة."
+        },
+        {
+            qEn: "Light is an important factor that affects rate of transpiration especially green light.",
+            qAr: "الضوء عامل مهم يؤثر على معدل النتح وخاصة الضوء الأخضر.",
+            options: ["True", "False"],
+            correctIndex: 1,
+            explanation: "شرح الإجابة: الإجابة هي (False) حيث أن الضوء يؤثر بقوة على النتح، ولكن الأطوال الموجية للضوء الأزرق والأحمر هما الأكثر فعالية (Action spectrum). ويعتبر الضوء الأزرق (Blue light) تحديداً هو الأهم والمحفز الأقوى لفتح الثغور بشكل كامل، وليس الأخضر.",
+            terms: "تعريف المصطلحات:\nAction spectrum (طيف العمل الفعال): النطاق الموجي للضوء الذي يسبب أعلى استجابة فسيولوجية في النبات كعملية البناء الضوئي أو فتح الثغور.\nBlue light (الضوء الأزرق): جزء من طيف الضوء المرئي تمتلك مستقبلات النبات حساسية عالية تجاهه وتستجيب له بفتح ثغور أوراقها بفعالية قصوى لتحفيز النتح."
+        },
+        {
+            qEn: "Urease is an example of absolute specificity of enzymes.",
+            qAr: "اليوريز هو مثال على التخصص المطلق للإنزيمات.",
+            options: ["True", "False"],
+            correctIndex: 0,
+            explanation: "شرح الإجابة: الإجابة هي (True) حيث يُعد إنزيم اليوريز (Urease) مثالاً كلاسيكياً ونموذجياً على التخصص المطلق للإنزيمات (Absolute specificity)، لكونه إنزيماً شديد التخصص يحفز تفاعلاً كيميائياً واحداً فقط وهو التحلل المائي لمركب اليوريا لإنتاج الأمونيا.",
+            terms: "تعريف المصطلحات:\nAbsolute specificity (التخصص المطلق): خاصية تتميز بها بعض الإنزيمات للتعرف على ركيزة كيميائية واحدة فقط والارتباط بها لتحفيز تفاعل محدد دون غيره.\nUrease (اليوريز): إنزيم مخصص حصرياً للارتباط بجزيء اليوريا وتكسيره مائياً لتحرير غازي ثاني أكسيد الكربون والأمونيا."
+        }
+    ];
+
+    const container = document.getElementById('quiz-container');
+
+    quizData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        // Question texts
+        const qEn = document.createElement('div');
+        qEn.className = 'question-text';
+        qEn.textContent = `${index + 1}. ${item.qEn}`;
+        
+        const qAr = document.createElement('div');
+        qAr.className = 'question-ar';
+        qAr.textContent = item.qAr;
+
+        // Options
+        const optionsGrid = document.createElement('div');
+        optionsGrid.className = 'options-grid';
+        
+        // Explanation toggle and content
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'explanation-toggle';
+        toggleBtn.textContent = '📖 Show Explanation & Terms (إظهار الشرح والمصطلحات)';
+        
+        const expContent = document.createElement('div');
+        expContent.className = 'explanation-content';
+        
+        const expText = document.createElement('div');
+        expText.className = 'explanation-text';
+        expText.textContent = item.explanation;
+        
+        const termsText = document.createElement('div');
+        termsText.className = 'terms-text';
+        termsText.textContent = item.terms;
+
+        expContent.appendChild(expText);
+        expContent.appendChild(termsText);
+
+        // Logic for answering
+        const buttons = [];
+        item.options.forEach((optText, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = optText;
+            
+            btn.addEventListener('click', () => {
+                // Disable all buttons in this card after clicking
+                buttons.forEach(b => b.disabled = true);
+                
+                if (optIndex === item.correctIndex) {
+                    btn.classList.add('correct');
+                } else {
+                    btn.classList.add('wrong');
+                    // Highlight the correct one
+                    buttons[item.correctIndex].classList.add('correct');
+                }
+                
+                // Show the explanation toggle
+                toggleBtn.style.display = 'block';
+            });
+            
+            buttons.push(btn);
+            optionsGrid.appendChild(btn);
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            expContent.classList.toggle('visible');
+            toggleBtn.textContent = expContent.classList.contains('visible') 
+                ? '📖 Hide Explanation (إخفاء الشرح)' 
+                : '📖 Show Explanation & Terms (إظهار الشرح والمصطلحات)';
+        });
+
+        card.appendChild(qEn);
+        card.appendChild(qAr);
+        card.appendChild(optionsGrid);
+        card.appendChild(toggleBtn);
+        card.appendChild(expContent);
+
+        container.appendChild(card);
+    });
+</script>
+</body>
+</html>
